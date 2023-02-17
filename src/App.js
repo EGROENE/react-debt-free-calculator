@@ -12,7 +12,7 @@ class App extends React.Component {
 
     // Each state var should correspond with an input field of the same name:
     this.state = {
-      loan: "",
+      loanAmount: "",
       interestRate: "",
       payment: "",
     };
@@ -37,7 +37,7 @@ class App extends React.Component {
 
   // Reset form:
   resetForm = () => {
-    this.setState({ loan: "", interestRate: "", payment: "" });
+    this.setState({ loanAmount: "", interestRate: "", payment: "" });
   };
 
   // Handle submission:
@@ -48,17 +48,15 @@ class App extends React.Component {
       <div id="hero" className="App">
         <header className="App-header">
           <form id="paymentForm" onSubmit={this.handleSubmission}>
-            <label htmlFor="debtPrincipal">
-              How much is your debt principal?
-            </label>
+            <label htmlFor="loanAmount">How much is your debt principal?</label>
             <input
               id="debtPrincipal"
               onChange={this.handleChange}
-              name="loan"
+              name="loanAmount"
               type="number"
               min="1"
               step="0.01"
-              placeholder="Debt principal"
+              placeholder="Loan amount"
               required
             />
             <br />
@@ -82,10 +80,10 @@ class App extends React.Component {
               step="0.01"
               min={(
                 Number(this.state.interestRate / 12) +
-                Number(this.state.loan * 0.01)
+                Number(this.state.loanAmount * 0.01)
               ).toFixed(2)}
               max={(
-                this.state.loan *
+                this.state.loanAmount *
                 (this.state.interestRate / 100 + 1)
               ).toFixed(2)}
               onChange={this.handleChange}
