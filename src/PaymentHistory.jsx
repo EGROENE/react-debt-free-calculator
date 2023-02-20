@@ -1,19 +1,28 @@
 import React from 'react';
 
-// FIND OUT HOW TO SHARE STATE B/T COMPS, MAYBE USING PROPS TO PASS TO PaymentHistory in App.jsx
-// Maybe put what's in app.jsx until render() for the form in PaymentForm.jsx once props are figured out
-// https://www.youtube.com/watch?v=0ULcw62Ycow&ab_channel=CodeStepByStep
-// https://www.geeksforgeeks.org/how-to-send-state-props-to-another-component-in-react-with-onclick/
-
 // Loop thru paymentDetails and display item containing necessary infos from each object in this array
 
 // Find way to access paymentDetails
 class PaymentHistory extends React.Component {
     render() {
+        const { paymentsArray } = this.props;
+        console.log(paymentsArray);
+    
+        /* const sessionStorage = window.sessionStorage
+        console.log(sessionStorage); */
+        // For every pmt in paymentsArray, push to new array defined in this component. This array will populate stuff below.
+        /* const allPayments = [...[paymentsArray]];
+        console.log(allPayments) */
+        //allPayments.push(paymentsArray)
         return (
             <div id='paymentHistory'>
-                <header>Payment History</header>
-                <p>hi</p>
+                {paymentsArray.map((pmt) => (
+                    <div className="payment">
+                        <p>Previous Balance: { pmt.prevBalance }</p>
+                        <p>Current Payment: { pmt.currentPayment }</p>
+                        <p>New Balance: { pmt.newBalance }</p>
+                    </div>
+                ))} 
             </div>
         )
     }

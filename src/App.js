@@ -1,9 +1,10 @@
 import React from "react";
 import "./App.css";
-//import PaymentForm from "./PaymentForm";
 import PaymentHistory from "./PaymentHistory";
 
 class App extends React.Component {
+  paymentInfo;
+
   constructor(props) {
     super(props);
     // Find a way to give both components access to this state
@@ -15,8 +16,32 @@ class App extends React.Component {
       loanAmount: "",
       interestRate: "",
       payment: "",
+      prevBalance: "",
+      newBalance: "",
+      paymentsArray: [],
     };
   }
+
+  /* updatePaymentHistory = (newPmt) => {
+    const updatedPmtsArray = [...this.state.paymentsArray];
+    console.log(updatedPmtsArray);
+    console.log(newPmt);
+    updatedPmtsArray.push(newPmt);
+    this.setState((prev) => ({
+      ...prev,
+      paymentsArray: updatedPmtsArray,
+    }));
+  }; */
+
+  /* updatePayment = (event) => {
+    const {
+      target: { value },
+    } = event;
+    this.setState((prev) => ({
+      ...prev,
+      payment: value,
+    }));
+  }; */
 
   // Since document DOM is not used in React, this is how to get the value of an input (whichever input handleChange() is applied to)
   handleChange = ({ target: { name, value } }) => {
@@ -30,18 +55,68 @@ class App extends React.Component {
     );
   };
 
-  // Methods to get min payment:
-  // Call inside min in 'payment' input
-  /*  getMinPmt = () => {
-  }; */
-
   // Reset form:
   resetForm = () => {
-    this.setState({ loanAmount: "", interestRate: "", payment: "" });
+    this.setState({
+      loanAmount: "",
+      interestRate: "",
+      payment: "",
+      prevBalance: "",
+      newBalance: "",
+    });
+  };
+
+  handleSubmission = (event) => {
+    event.preventDefault();
+    this.setState({
+      loanAmount: "",
+      payment: "",
+      interestRate: "",
+    });
   };
 
   // Handle submission:
   // Make sure to add pmt infos to an object. These are for PaymentHistory
+  updatePaymentInfo = () => {
+    //event.preventDefault();
+    // Get date here (define state, then set to date when user submits payment)
+    let prevBalance =
+      this.state.loanAmount * (this.state.interestRate / 100 + 1);
+    let currentPayment = Number(this.state.payment);
+    let newBalance = prevBalance - this.state.payment;
+    console.log(newBalance);
+
+    /* this.setState(
+      {
+        prevBalance: prevBalance,
+        payment: currentPayment,
+        newBalance: newBalance,
+        paymentsArray: [
+          {
+            prevBalance: prevBalance,
+            currentPayment: currentPayment,
+            newBalance: newBalance,
+          },
+        ],
+      },
+      () => {
+        console.log(this.state.paymentsArray);
+      }
+    ); */
+    const newArray = [...this.state.paymentsArray];
+    newArray.push({
+      prevBalance: prevBalance,
+      currentPayment: currentPayment,
+      newBalance: newBalance,
+    });
+    this.setState((prev) => ({
+      prevBalance: prevBalance,
+      payment: currentPayment,
+      newBalance: newBalance,
+      ...prev,
+      paymentsArray: newArray,
+    }));
+  };
 
   render() {
     return (
@@ -94,8 +169,18 @@ class App extends React.Component {
             <button type="reset" onClick={this.resetForm}>
               Reset All Fields
             </button>
-            <button type="submit">Submit Payment</button>
+            <button
+              /* onClick={() => {
+                this.updatePayment();
+                this.updatePaymentHistory();
+              }} */
+              onClick={this.updatePaymentInfo}
+              type="submit"
+            >
+              Submit Payment
+            </button>
           </form>
+          <PaymentHistory {...this.state} />
         </header>
       </div>
     );
