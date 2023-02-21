@@ -23,37 +23,11 @@ class App extends React.Component {
     };
   }
 
-  /* updatePaymentHistory = (newPmt) => {
-    const updatedPmtsArray = [...this.state.paymentsArray];
-    console.log(updatedPmtsArray);
-    console.log(newPmt);
-    updatedPmtsArray.push(newPmt);
-    this.setState((prev) => ({
-      ...prev,
-      paymentsArray: updatedPmtsArray,
-    }));
-  }; */
-
-  /* updatePayment = (event) => {
-    const {
-      target: { value },
-    } = event;
-    this.setState((prev) => ({
-      ...prev,
-      payment: value,
-    }));
-  }; */
-
   // Since document DOM is not used in React, this is how to get the value of an input (whichever input handleChange() is applied to)
   handleChange = ({ target: { name, value } }) => {
-    this.setState(
-      {
-        [`${name}`]: value,
-      },
-      () => {
-        console.log(value);
-      }
-    );
+    this.setState({
+      [`${name}`]: value,
+    });
   };
 
   // Reset form:
@@ -70,6 +44,7 @@ class App extends React.Component {
 
   handleSubmission = (event) => {
     event.preventDefault();
+    this.updatePaymentInfo();
     this.setState({
       loanAmount: "",
       interestRate: "",
@@ -83,8 +58,6 @@ class App extends React.Component {
   // Handle submission:
   // Make sure to add pmt infos to an object. These are for PaymentHistory
   updatePaymentInfo = () => {
-    //event.preventDefault();
-    // Get date here (define state, then set to date when user submits payment)
     let prevBalance =
       this.state.loanAmount * (this.state.interestRate / 100 + 1);
     let currentPayment = Number(this.state.payment);
@@ -165,16 +138,7 @@ class App extends React.Component {
             <button type="reset" onClick={this.resetForm}>
               Reset All Fields
             </button>
-            <button
-              /* onClick={() => {
-                this.updatePayment();
-                this.updatePaymentHistory();
-              }} */
-              onClick={this.updatePaymentInfo}
-              type="submit"
-            >
-              Submit Payment
-            </button>
+            <button type="submit">Submit Payment</button>
           </form>
           <PaymentHistory {...this.state} />
         </header>
