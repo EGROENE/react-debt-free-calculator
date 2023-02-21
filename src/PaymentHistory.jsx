@@ -17,10 +17,11 @@ class PaymentHistory extends React.Component {
         return (
             <div id='paymentHistory'>
                 {paymentsArray.map((pmt) => (
-                    <div className="payment">
-                        <p>Previous Balance: { pmt.prevBalance }</p>
-                        <p>Current Payment: { pmt.currentPayment }</p>
-                        <p>New Balance: { pmt.newBalance }</p>
+                    <div key={pmt.paymentDate} className="paymentHistoryItem">
+                        <p key={pmt.paymentDate + 'paymentDate'}>Date of Payment: { pmt.paymentDate.toLocaleString() }</p>
+                        <p key={pmt.paymentDate + 'prevBalance'}>Previous Balance: { pmt.prevBalance }</p>
+                        <p key={pmt.paymentDate + 'currentPayment'}>Current Payment: { pmt.currentPayment }</p>
+                        <p key={pmt.paymentDate + 'newBalance'}>New Balance: { pmt.newBalance }</p>
                     </div>
                 ))} 
             </div>

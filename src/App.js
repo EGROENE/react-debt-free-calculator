@@ -19,6 +19,7 @@ class App extends React.Component {
       prevBalance: "",
       newBalance: "",
       paymentsArray: [],
+      paymentDate: "",
     };
   }
 
@@ -63,6 +64,7 @@ class App extends React.Component {
       payment: "",
       prevBalance: "",
       newBalance: "",
+      paymentDate: "",
     });
   };
 
@@ -70,8 +72,11 @@ class App extends React.Component {
     event.preventDefault();
     this.setState({
       loanAmount: "",
-      payment: "",
       interestRate: "",
+      paymentDate: "",
+      payment: "",
+      prevBalance: "",
+      newBalance: "",
     });
   };
 
@@ -84,32 +89,17 @@ class App extends React.Component {
       this.state.loanAmount * (this.state.interestRate / 100 + 1);
     let currentPayment = Number(this.state.payment);
     let newBalance = prevBalance - this.state.payment;
-    console.log(newBalance);
+    let paymentDate = new Date();
 
-    /* this.setState(
-      {
-        prevBalance: prevBalance,
-        payment: currentPayment,
-        newBalance: newBalance,
-        paymentsArray: [
-          {
-            prevBalance: prevBalance,
-            currentPayment: currentPayment,
-            newBalance: newBalance,
-          },
-        ],
-      },
-      () => {
-        console.log(this.state.paymentsArray);
-      }
-    ); */
     const newArray = [...this.state.paymentsArray];
     newArray.push({
+      paymentDate: paymentDate,
       prevBalance: prevBalance,
       currentPayment: currentPayment,
       newBalance: newBalance,
     });
     this.setState((prev) => ({
+      paymentDate: paymentDate,
       prevBalance: prevBalance,
       payment: currentPayment,
       newBalance: newBalance,
