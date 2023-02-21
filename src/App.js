@@ -152,7 +152,13 @@ class App extends React.Component {
                 (this.state.interestRate / 100 + 1)
               ).toFixed(2)}
               onChange={this.handleChange}
-              placeholder="What you'd like to pay"
+              placeholder={
+                "min: " +
+                (
+                  Number(this.state.interestRate / 12) +
+                  Number(this.state.loanAmount * 0.01)
+                ).toFixed(2)
+              }
               required
             />
             <br />
