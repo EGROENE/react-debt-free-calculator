@@ -20,6 +20,7 @@ class App extends React.Component {
       newBalance: "",
       paymentsArray: [],
       paymentDate: "",
+      transactionNumber: "",
     };
   }
 
@@ -46,14 +47,6 @@ class App extends React.Component {
     event.preventDefault();
     this.updatePaymentInfo();
     this.resetForm();
-    /* this.setState({
-      loanAmount: "",
-      interestRate: "",
-      paymentDate: "",
-      payment: "",
-      prevBalance: "",
-      newBalance: "",
-    }); */
   };
 
   // Handle submission:
@@ -64,15 +57,24 @@ class App extends React.Component {
     let currentPayment = Number(this.state.payment);
     let newBalance = prevBalance - this.state.payment;
     let paymentDate = new Date();
+    // Create random 13-digit transaction number:
+    let digits = "0123456789";
+    let transactionNumber = "";
+    for (let i = 0; i < 13; i++) {
+      // Hex code can only go up to 6, so i < 6. This loop runs once for every function call.
+      transactionNumber += digits[Math.floor(Math.random() * 9)]; // 16 because of all the different possibilities in a hex code
+    }
 
     const newArray = [...this.state.paymentsArray];
     newArray.push({
+      transactionNumber: transactionNumber,
       paymentDate: paymentDate,
       prevBalance: prevBalance,
       currentPayment: currentPayment,
       newBalance: newBalance,
     });
     this.setState((prev) => ({
+      transactionNumber: transactionNumber,
       paymentDate: paymentDate,
       prevBalance: prevBalance,
       payment: currentPayment,

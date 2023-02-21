@@ -18,6 +18,7 @@ class PaymentHistory extends React.Component {
             <div id='paymentHistory'>
                 {paymentsArray.map((pmt) => (
                     <div key={pmt.paymentDate} className="paymentHistoryItem">
+                        <p key={pmt.paymentDate + 'transactionNumber'}>Transaction Number: { pmt.transactionNumber }</p>
                         <p key={pmt.paymentDate + 'paymentDate'}>Date of Payment: { pmt.paymentDate.toLocaleString() }</p>
                         <p key={pmt.paymentDate + 'prevBalance'}>Previous Balance: { pmt.prevBalance.toLocaleString(undefined,{minimumFractionDigits: 2,
                         maximumFractionDigits: 2}) }</p>
