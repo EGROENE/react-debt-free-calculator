@@ -45,6 +45,7 @@ class App extends React.Component {
 
   handleSubmission = (event) => {
     event.preventDefault();
+    document.getElementById("paymentForm").reset();
     this.updatePaymentInfo();
     this.resetForm();
   };
