@@ -45,14 +45,15 @@ class App extends React.Component {
   handleSubmission = (event) => {
     event.preventDefault();
     this.updatePaymentInfo();
-    this.setState({
+    this.resetForm();
+    /* this.setState({
       loanAmount: "",
       interestRate: "",
       paymentDate: "",
       payment: "",
       prevBalance: "",
       newBalance: "",
-    });
+    }); */
   };
 
   // Handle submission:
