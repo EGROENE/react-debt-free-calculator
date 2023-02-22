@@ -16,6 +16,8 @@ class App extends React.Component {
       loanAmount: "",
       interestRate: "",
       payment: "",
+      intPmt: "",
+      minPrincipalPmt: "",
       prevBalance: "",
       newBalance: "",
       paymentsArray: [],
@@ -26,9 +28,31 @@ class App extends React.Component {
 
   // Since document DOM is not used in React, this is how to get the value of an input (whichever input handleChange() is applied to)
   handleChange = ({ target: { name, value } }) => {
-    this.setState({
-      [`${name}`]: value,
-    });
+    /* let minPrincipalPmt = this.state.loanAmount * 0.01;
+    let intPmt =
+      this.state.loanAmount * ((this.state.interestRate * 0.01) / 12); */
+    this.setState(
+      {
+        [`${name}`]: value,
+      },
+      () => {
+        /* console.log(this.state.minPrincipalPmt);
+        console.log(this.state.intPmt); */
+        let minPrincipalPmt = this.state.loanAmount * 0.01;
+        let intPmt =
+          this.state.loanAmount * ((this.state.interestRate * 0.01) / 12);
+        this.setState(
+          {
+            minPrincipalPmt: minPrincipalPmt,
+            intPmt: intPmt,
+          },
+          () => {
+            console.log(this.state.minPrincipalPmt);
+            console.log(this.state.intPmt);
+          }
+        );
+      }
+    );
   };
 
   // Reset form:
@@ -37,6 +61,8 @@ class App extends React.Component {
       loanAmount: "",
       interestRate: "",
       payment: "",
+      intPmt: "",
+      minPrincipalPmt: "",
       prevBalance: "",
       newBalance: "",
       paymentDate: "",
@@ -117,20 +143,30 @@ class App extends React.Component {
               name="payment"
               type="number"
               step="0.01"
-              min={(
+              /* min={(
                 Number(this.state.interestRate / 12) +
                 Number(this.state.loanAmount * 0.01)
+              ).toFixed(2)} */
+              min={(
+                Number(this.state.intPmt) + Number(this.state.minPrincipalPmt)
               ).toFixed(2)}
               max={(
                 this.state.loanAmount *
                 (this.state.interestRate / 100 + 1)
               ).toFixed(2)}
+              /* max={t} */
               onChange={this.handleChange}
-              placeholder={
+              /* placeholder={
                 "min: " +
                 (
                   Number(this.state.interestRate / 12) +
                   Number(this.state.loanAmount * 0.01)
+                ).toFixed(2)
+              } */
+              placeholder={
+                "min: " +
+                (
+                  Number(this.state.intPmt) + Number(this.state.minPrincipalPmt)
                 ).toFixed(2)
               }
               required
