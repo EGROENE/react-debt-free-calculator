@@ -15,6 +15,7 @@ class App extends React.Component {
     this.state = {
       loanAmount: "",
       interestRate: "",
+      totalBalance: "",
       payment: "",
       intPmt: "",
       minPrincipalPmt: "",
@@ -41,14 +42,18 @@ class App extends React.Component {
         let minPrincipalPmt = this.state.loanAmount * 0.01;
         let intPmt =
           this.state.loanAmount * ((this.state.interestRate * 0.01) / 12);
+        let totalBalance =
+          this.state.loanAmount * (this.state.interestRate / 100 + 1);
         this.setState(
           {
             minPrincipalPmt: minPrincipalPmt,
             intPmt: intPmt,
+            totalBalance: totalBalance,
           },
           () => {
             console.log(this.state.minPrincipalPmt);
             console.log(this.state.intPmt);
+            console.log(this.state.totalBalance);
           }
         );
       }
@@ -60,6 +65,7 @@ class App extends React.Component {
     this.setState({
       loanAmount: "",
       interestRate: "",
+      totalBalance: "",
       payment: "",
       intPmt: "",
       minPrincipalPmt: "",
@@ -147,6 +153,7 @@ class App extends React.Component {
                 Number(this.state.interestRate / 12) +
                 Number(this.state.loanAmount * 0.01)
               ).toFixed(2)} */
+              // IF TOTALBALANCE IS LESS THAN OVER 100, ETC. - SEE CONDITIONAL RENDER IN PAYMENTHISTORY
               min={(
                 Number(this.state.intPmt) + Number(this.state.minPrincipalPmt)
               ).toFixed(2)}
