@@ -6,7 +6,6 @@ import React from 'react';
 class PaymentHistory extends React.Component {
     render() {
         const { paymentsArray } = this.props;
-        console.log(paymentsArray);
         return (
             <div id='paymentHistory'>
                 {paymentsArray.map((pmt) => (
