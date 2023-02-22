@@ -50,8 +50,6 @@ class App extends React.Component {
     this.resetForm();
   };
 
-  // Handle submission:
-  // Make sure to add pmt infos to an object. These are for PaymentHistory
   updatePaymentInfo = () => {
     let prevBalance =
       this.state.loanAmount * (this.state.interestRate / 100 + 1);
@@ -62,8 +60,7 @@ class App extends React.Component {
     let digits = "0123456789";
     let transactionNumber = "";
     for (let i = 0; i < 13; i++) {
-      // Hex code can only go up to 6, so i < 6. This loop runs once for every function call.
-      transactionNumber += digits[Math.floor(Math.random() * 9)]; // 16 because of all the different possibilities in a hex code
+      transactionNumber += digits[Math.floor(Math.random() * 9)];
     }
 
     const newArray = [...this.state.paymentsArray];
