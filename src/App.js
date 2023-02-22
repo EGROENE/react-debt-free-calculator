@@ -164,9 +164,15 @@ class App extends React.Component {
                 ).toFixed(2)
               } */
               placeholder={
-                "min: " +
+                "$" +
                 (
                   Number(this.state.intPmt) + Number(this.state.minPrincipalPmt)
+                ).toFixed(2) +
+                " - " +
+                "$" +
+                (
+                  this.state.loanAmount *
+                  (this.state.interestRate / 100 + 1)
                 ).toFixed(2)
               }
               required
