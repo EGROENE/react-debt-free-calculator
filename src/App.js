@@ -3,7 +3,7 @@ import "./App.css";
 import PaymentHistory from "./PaymentHistory";
 
 class App extends React.Component {
-  paymentInfo;
+  //paymentInfo;
 
   constructor(props) {
     super(props);
@@ -69,7 +69,7 @@ class App extends React.Component {
             ) {
               this.setState({ payment: this.state.totalBalance }, () => {
                 console.log(this.state.payment);
-                document.getElementById("payment").value = Number(
+                document.getElementById("payment").textContent = Number(
                   this.state.payment
                 ).toFixed(2);
                 document
@@ -95,6 +95,7 @@ class App extends React.Component {
       prevBalance: "",
       newBalance: "",
       paymentDate: "",
+      transactionNumber: "",
     });
   };
 
@@ -117,7 +118,9 @@ class App extends React.Component {
     for (let i = 0; i < 13; i++) {
       transactionNumber += digits[Math.floor(Math.random() * 9)];
     }
-    let remainingPayments = Math.ceil(newBalance / currentPayment) - 1;
+    let remainingPayments = Math.ceil((newBalance / currentPayment).toFixed(5));
+    console.log(newBalance / currentPayment);
+    console.log(remainingPayments);
 
     const newArray = [...this.state.paymentsArray];
     newArray.push({
