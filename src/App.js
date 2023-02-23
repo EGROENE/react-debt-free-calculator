@@ -92,10 +92,11 @@ class App extends React.Component {
       payment: "",
       intPmt: "",
       minPrincipalPmt: "",
+      transactionNumber: "",
       prevBalance: "",
       newBalance: "",
       paymentDate: "",
-      transactionNumber: "",
+      remainingPayments: "",
     });
   };
 
