@@ -171,7 +171,32 @@ class App extends React.Component {
               required
             />
             <br />
-            <p>Total Balance: {this.state.totalBalance}</p>
+            <p>
+              {"Total Balance: $ " +
+                this.state.totalBalance.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }) +
+                " "}
+              <span>
+                {" $" +
+                  Number(this.state.loanAmount).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }) +
+                  " Principal, "}
+                {"$" +
+                  (
+                    Number(this.state.loanAmount) *
+                    Number(this.state.interestRate / 100)
+                  ).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }) +
+                  " "}
+                Interest
+              </span>
+            </p>
             <br />
             <label htmlFor="payment">
               How much would you like to pay? (min 1% of principal + monthly
