@@ -171,6 +171,8 @@ class App extends React.Component {
               required
             />
             <br />
+            <p>Total Balance: {this.state.totalBalance}</p>
+            <br />
             <label htmlFor="payment">
               How much would you like to pay? (min 1% of principal + monthly
               interest)
