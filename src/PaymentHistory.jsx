@@ -27,7 +27,7 @@ class PaymentHistory extends React.Component {
                         maximumFractionDigits: 2})  }</p>
                         <p key={pmt.transactionNumber + 'principal'}>New Principal: {pmt.principal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
                         {pmt.remainingPayments > 0
-                            ? <p key={pmt.transactionNumber + 'remainingPayments'}>Approximate payments remaining if you pay same amount: {pmt.remainingPayments} (final payment may be less).</p>
+                            ? <p key={pmt.transactionNumber + 'remainingPayments'}>Approximate payments remaining, based on current payment: {pmt.remainingPayments} (final payment may be less).</p>
                             : <p key={pmt.transactionNumber + 'remainingPayments'}>You're debt-free!</p>
                         }
                     </div>
