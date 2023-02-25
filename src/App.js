@@ -90,7 +90,7 @@ class App extends React.Component {
     this.updatePaymentInfo();
     console.log(this.state.totalBalance);
     document.getElementById("paymentForm").reset();
-    let pmtPlaceholder = document.getElementById("payment").placeholder;
+    /*     let pmtPlaceholder = document.getElementById("payment").placeholder;
     if (this.state.totalBalance > 100) {
       pmtPlaceholder =
         this.state.principal * (this.state.interestRate / 100 + 1).toFixed(2);
@@ -105,7 +105,7 @@ class App extends React.Component {
         " - " +
         "$" +
         (this.state.principal * (this.state.interestRate / 100 + 1)).toFixed(2);
-    }
+    } */
     document.getElementById("debtPrincipal").setAttribute("disabled", "true");
     document.getElementById("interestRate").setAttribute("disabled", "true");
   };
@@ -193,8 +193,47 @@ class App extends React.Component {
         principal: newPrincipal,
         totalBalance: newBalance,
         interestRate: interestRate,
+        intPmt: intPmt,
       },
-      () => console.log(this.state.principal)
+      () => {
+        console.log(this.state.principal);
+        console.log(this.state.intPmt);
+        let pmtPlaceholderValue;
+        if (this.state.totalBalance <= 100) {
+          /* pmtPlaceholderValue =
+            this.state.principal *
+            (this.state.interestRate / 100 + 1).toFixed(2); */
+          pmtPlaceholderValue =
+            Number(this.state.principal) + Number(this.state.intPmt);
+        } else {
+          pmtPlaceholderValue =
+            "$" +
+            (
+              Number(this.state.principal) * 0.01 +
+              Number(this.state.principal) *
+                ((Number(this.state.interestRate) * 0.01) / 12)
+            ).toFixed(2) +
+            " - " +
+            /* "$" +
+            (
+              this.state.principal *
+              (this.state.interestRate / 100 + 1)
+            ).toFixed(2); */
+            "$" +
+            /* (
+              Number(this.state.principal) +
+              Number(this.state.principal) *
+                ((Number(this.state.interestRate) * 0.01) / 12)
+            ).toFixed(2); */
+            (
+              Number(this.state.intPmt.toFixed(2)) +
+              Number(this.state.principal.toFixed(2))
+            ).toFixed(2);
+        }
+        console.log(Number(this.state.intPmt) + Number(this.state.principal));
+        console.log(pmtPlaceholderValue);
+        document.getElementById("payment").placeholder = pmtPlaceholderValue;
+      }
     );
   };
 
