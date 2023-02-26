@@ -24,6 +24,7 @@ class App extends React.Component {
       payment: "",
       transactionNumber: "",
       prevBalance: "",
+      totalInterestOwed: "",
       newBalance: "",
       paymentsArray: [],
       paymentDate: "",
@@ -49,12 +50,15 @@ class App extends React.Component {
         let totalBalance =
           this.state.principal * (this.state.interestRate / 100 + 1);
 
+        let totalInterestOwed = totalBalance - this.state.principal;
+
         this.setState(
           {
             minPrincipalPayment: minPrincipalPayment,
             intPmt: intPmt,
             totalMinimumPayment: totalMinimumPayment,
             totalBalance: totalBalance,
+            totalInterestOwed: totalInterestOwed,
           },
           () => {
             console.log(this.state.principal);
@@ -143,6 +147,8 @@ class App extends React.Component {
 
     let newBalance = newPrincipal * (this.state.interestRate / 100 + 1);
 
+    let totalInterestOwed = newBalance - newPrincipal;
+
     let paymentDate = new Date();
 
     // Create random 13-digit transaction number:
@@ -160,6 +166,7 @@ class App extends React.Component {
       paymentDate: paymentDate,
       prevBalance: prevBalance,
       totalBalance: totalBalance,
+      totalInterestOwed: totalInterestOwed,
       principalPmt: principalPmt,
       intPmt: intPmt,
       currentPayment: currentPayment,
@@ -174,6 +181,7 @@ class App extends React.Component {
       paymentDate: paymentDate,
       prevBalance: prevBalance,
       totalBalance: totalBalance,
+      totalInterestOwed: totalInterestOwed,
       principalPmt: principalPmt,
       intPmt: intPmt,
       payment: currentPayment,
@@ -189,6 +197,7 @@ class App extends React.Component {
       {
         principal: newPrincipal,
         totalBalance: newBalance,
+        totalInterestOwed: totalInterestOwed,
         interestRate: interestRate,
         intPmt: intPmt,
       },
