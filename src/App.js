@@ -141,10 +141,7 @@ class App extends React.Component {
     console.log(this.state.intPmt);
     console.log(newPrincipal);
 
-    let newBalance = (
-      newPrincipal *
-      (this.state.interestRate / 100 + 1)
-    ).toFixed(2);
+    let newBalance = newPrincipal * (this.state.interestRate / 100 + 1);
 
     let paymentDate = new Date();
 
