@@ -230,6 +230,15 @@ class App extends React.Component {
         console.log(Number(this.state.intPmt) + Number(this.state.principal));
         console.log(pmtPlaceholderValue);
         document.getElementById("payment").placeholder = pmtPlaceholderValue;
+        document.getElementById("payment").min = (
+          Number(this.state.principal) * 0.01 +
+          Number(this.state.principal) *
+            ((Number(this.state.interestRate) * 0.01) / 12)
+        ).toFixed(2);
+        document.getElementById("payment").max = (
+          Number(this.state.intPmt.toFixed(2)) +
+          Number(this.state.principal.toFixed(2))
+        ).toFixed(2);
       }
     );
   };
