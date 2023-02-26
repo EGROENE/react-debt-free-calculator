@@ -16,15 +16,17 @@ class App extends React.Component {
       prevPrincipal: "",
       principal: "",
       interestRate: "",
+      prevIntPmt: "",
       intPmt: "",
       minPrincipalPayment: "",
       totalMinimumPayment: "",
       totalBalance: "",
-      principalPmt: "", // = payment - intPmt
+      principalPmt: "",
       payment: "",
       transactionNumber: "",
       prevBalance: "",
-      totalInterestOwed: "",
+      prevInterestOwed: "",
+      interestOwed: "",
       newBalance: "",
       paymentsArray: [],
       paymentDate: "",
@@ -50,7 +52,7 @@ class App extends React.Component {
         let totalBalance =
           this.state.principal * (this.state.interestRate / 100 + 1);
 
-        let totalInterestOwed = totalBalance - this.state.principal;
+        let interestOwed = totalBalance - this.state.principal;
 
         this.setState(
           {
@@ -58,7 +60,7 @@ class App extends React.Component {
             intPmt: intPmt,
             totalMinimumPayment: totalMinimumPayment,
             totalBalance: totalBalance,
-            totalInterestOwed: totalInterestOwed,
+            interestOwed: interestOwed,
           },
           () => {
             console.log(this.state.principal);
@@ -116,6 +118,7 @@ class App extends React.Component {
 
   updatePaymentInfo = () => {
     let interestRate = this.state.interestRate;
+    let intPmt = Number(this.state.intPmt);
 
     let prevBalance =
       this.state.principal * (this.state.interestRate / 100 + 1);
@@ -124,12 +127,18 @@ class App extends React.Component {
 
     let currentPayment = Number(this.state.payment);
     console.log(this.state.payment);
+    let payment = Number(this.state.payment);
+    // if current payment - intPmt >= this.state.principal, then currentPayment should equal intPmt + this.state.principal
+    /* let currentPayment;
+    if (this.state.payment - intPmt >= this.state.principal) {
+      currentPayment = this.state.principal + intPmt;
+    } else {
+      currentPayment = Number(this.state.payment);
+    } */
 
     console.log(this.state.intPmt);
     let principalPmt = currentPayment - this.state.intPmt;
     console.log(principalPmt.toFixed(2));
-
-    let intPmt = Number(this.state.intPmt);
 
     //let newBalance = prevBalance - this.state.payment;
     /* let newBalance = (
@@ -147,7 +156,11 @@ class App extends React.Component {
 
     let newBalance = newPrincipal * (this.state.interestRate / 100 + 1);
 
-    let totalInterestOwed = newBalance - newPrincipal;
+    let prevInterestOwed = Number(this.state.interestOwed);
+    let newInterestOwed = newBalance - newPrincipal;
+
+    let prevIntPmt = (prevBalance + intPmt) / 12;
+    console.log(prevIntPmt);
 
     let paymentDate = new Date();
 
@@ -166,10 +179,11 @@ class App extends React.Component {
       paymentDate: paymentDate,
       prevBalance: prevBalance,
       totalBalance: totalBalance,
-      totalInterestOwed: totalInterestOwed,
+      prevInterestOwed: prevInterestOwed,
+      interestOwed: newInterestOwed,
       principalPmt: principalPmt,
       intPmt: intPmt,
-      currentPayment: currentPayment,
+      payment: payment,
       newBalance: newBalance,
       prevPrincipal: prevPrincipal,
       principal: newPrincipal,
@@ -181,10 +195,11 @@ class App extends React.Component {
       paymentDate: paymentDate,
       prevBalance: prevBalance,
       totalBalance: totalBalance,
-      totalInterestOwed: totalInterestOwed,
+      prevInterestOwed: prevInterestOwed,
+      interestOwed: newInterestOwed,
       principalPmt: principalPmt,
       intPmt: intPmt,
-      payment: currentPayment,
+      //payment: currentPayment,
       newBalance: newBalance,
       prevPrincipal: prevPrincipal,
       principal: newPrincipal,
@@ -197,7 +212,7 @@ class App extends React.Component {
       {
         principal: newPrincipal,
         totalBalance: newBalance,
-        totalInterestOwed: totalInterestOwed,
+        interestOwed: newInterestOwed,
         interestRate: interestRate,
         intPmt: intPmt,
       },
@@ -209,8 +224,11 @@ class App extends React.Component {
           /* pmtPlaceholderValue =
             this.state.principal *
             (this.state.interestRate / 100 + 1).toFixed(2); */
-          pmtPlaceholderValue =
-            Number(this.state.principal) + Number(this.state.intPmt);
+          pmtPlaceholderValue = (
+            Number(this.state.principal) +
+            (Number(this.state.principal) * Number(this.state.interestRate)) /
+              12
+          ).toFixed(2);
         } else {
           pmtPlaceholderValue =
             "$" +
@@ -232,8 +250,9 @@ class App extends React.Component {
                 ((Number(this.state.interestRate) * 0.01) / 12)
             ).toFixed(2); */
             (
-              Number(this.state.intPmt.toFixed(2)) +
-              Number(this.state.principal.toFixed(2))
+              Number(this.state.principal) +
+              Number(this.state.principal) *
+                ((Number(this.state.interestRate) * 0.01) / 12)
             ).toFixed(2);
         }
         console.log(Number(this.state.intPmt) + Number(this.state.principal));
@@ -245,8 +264,9 @@ class App extends React.Component {
             ((Number(this.state.interestRate) * 0.01) / 12)
         ).toFixed(2);
         document.getElementById("payment").max = (
-          Number(this.state.intPmt.toFixed(2)) +
-          Number(this.state.principal.toFixed(2))
+          Number(this.state.principal) +
+          Number(this.state.principal) *
+            ((Number(this.state.interestRate) * 0.01) / 12)
         ).toFixed(2);
       }
     );
@@ -279,37 +299,10 @@ class App extends React.Component {
               placeholder="Interest rate"
               required
             />
-            {/* <br /> */}
-            {/* <p>
-              {"Total Balance: $ " +
-                this.state.totalBalance.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }) +
-                " "}
-              <span>
-                {" $" +
-                  Number(this.state.principal).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }) +
-                  " Principal, "}
-                {"$" +
-                  (
-                    Number(this.state.principal) *
-                    Number(this.state.interestRate / 100)
-                  ).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }) +
-                  " "}
-                Interest
-              </span>
-            </p> */}
             <br />
             <label htmlFor="payment">
-              How much would you like to pay? (min 1% of principal + monthly
-              interest, already included)
+              How much would you like to pay? (min: 1% * principal + monthly
+              interest; max: remaining principal + monthly interest)
             </label>
             <input
               name="payment"
