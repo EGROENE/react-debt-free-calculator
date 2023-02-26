@@ -131,8 +131,9 @@ class App extends React.Component {
     let interestRate = this.state.interestRate;
     let intPmt = Number(this.state.intPmt);
 
-    let prevBalance =
-      this.state.principal * (this.state.interestRate / 100 + 1);
+    /* let prevBalance =
+      this.state.principal * (this.state.interestRate / 100 + 1); */
+    let prevBalance = this.state.totalBalance;
 
     let totalBalance = this.state.totalBalance;
 
