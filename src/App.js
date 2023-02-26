@@ -151,6 +151,10 @@ class App extends React.Component {
 
     //let newPrincipal = this.state.principal - principalPmt;
     let newPrincipal = prevPrincipal - principalPmt;
+    console.log(newPrincipal);
+    if (newPrincipal < 1) {
+      newPrincipal -= 0 + newPrincipal;
+    }
     console.log(this.state.intPmt);
     console.log(newPrincipal);
 

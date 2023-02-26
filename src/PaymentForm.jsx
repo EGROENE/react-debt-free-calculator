@@ -50,10 +50,10 @@ class PaymentForm extends React.Component {
           this.state;
 
         let interestOwed = (interestRate * principal).toFixed(2);
-        let totalInterestOwedField = document.getElementById(
+        let interestOwedField = document.getElementById(
           "interestPaymentAmount"
         );
-        totalInterestOwedField.textContent =
+        interestOwedField.textContent =
           "The total interest you owe is: $" + interestOwed;
 
         let totalDebt = (Number(interestOwed) + Number(principal)).toFixed(2);
@@ -67,7 +67,7 @@ class PaymentForm extends React.Component {
         // NEXT: THESE INPUT FIELDS SHOULD BE DISABLED BEFORE THEY ARE CHANGED
         if (totalDebt <= 100) {
           principalPaymentAmountField.setAttribute("disabled", "true");
-          totalInterestOwedField.setAttribute("disabled", "true"); // NOT DISABLING
+          interestOwedField.setAttribute("disabled", "true"); // NOT DISABLING
           totalCurrentPayment = totalDebt;
           totalCurrentPaymentField.textContent =
             "Total payment today: $" +
@@ -75,7 +75,7 @@ class PaymentForm extends React.Component {
             " (remaining balance)";
         } else {
           principalPaymentAmountField.removeAttribute("disabled");
-          totalInterestOwedField.removeAttribute("disabled");
+          interestOwedField.removeAttribute("disabled");
           principalPaymentAmountField.value = this.state.minPrincipalPayment;
           totalCurrentPayment = (
             Number(principalPmt) + Number(interestPmt)
@@ -140,9 +140,9 @@ class PaymentForm extends React.Component {
         interestPmt: 0,
       },
       () => {
-        const totalInterestOwedField =
-          document.getElementById("totalInterestOwed");
-        totalInterestOwedField.textContent = "";
+        const interestOwedField =
+          document.getElementById("interestOwed");
+        interestOwedField.textContent = "";
 
         const totalDebtField = document.getElementById("totalDebt");
         totalDebtField.textContent = "";
