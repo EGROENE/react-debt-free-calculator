@@ -126,6 +126,7 @@ class App extends React.Component {
     let totalBalance = this.state.totalBalance;
 
     let currentPayment = Number(this.state.payment);
+
     console.log(this.state.payment);
     let payment = Number(this.state.payment);
     // if current payment - intPmt >= this.state.principal, then currentPayment should equal intPmt + this.state.principal
@@ -167,6 +168,17 @@ class App extends React.Component {
 
     let prevIntPmt = (prevBalance + intPmt) / 12;
     console.log(prevIntPmt);
+
+    console.log(currentPayment);
+    console.log(prevBalance);
+    if (currentPayment === prevBalance) {
+      newPrincipal = 0;
+      newInterestOwed = 0;
+      newBalance = 0;
+    }
+    console.log(newPrincipal);
+    console.log(newInterestOwed);
+    console.log(newBalance);
 
     let paymentDate = new Date();
 
