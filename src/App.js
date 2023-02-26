@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import PaymentHistory from "./PaymentHistory";
 
+let pmtCounter = 0;
 class App extends React.Component {
   //paymentInfo;
 
@@ -49,8 +50,16 @@ class App extends React.Component {
 
         let totalMinimumPayment = minPrincipalPayment + intPmt;
 
+        /* let totalBalance =
+          this.state.principal * (this.state.interestRate / 100 + 1); */
         let totalBalance =
-          this.state.principal * (this.state.interestRate / 100 + 1);
+          Number(this.state.principal) + Number(this.state.interestOwed);
+        if (pmtCounter > 0) {
+        } else {
+          totalBalance =
+            this.state.principal * (this.state.interestRate / 100 + 1);
+        }
+        console.log(totalBalance);
 
         let interestOwed = totalBalance - this.state.principal;
 
@@ -93,6 +102,8 @@ class App extends React.Component {
 
   handleSubmission = (event) => {
     event.preventDefault();
+    pmtCounter++;
+    console.log(pmtCounter);
     this.updatePaymentInfo();
     console.log(this.state.totalBalance);
     document.getElementById("paymentForm").reset();
