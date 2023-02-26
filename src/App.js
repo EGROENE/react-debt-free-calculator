@@ -158,10 +158,12 @@ class App extends React.Component {
     console.log(this.state.intPmt);
     console.log(newPrincipal);
 
-    let newBalance = newPrincipal * (this.state.interestRate / 100 + 1);
-
     let prevInterestOwed = Number(this.state.interestOwed);
-    let newInterestOwed = newBalance - newPrincipal;
+    console.log(prevInterestOwed);
+    //let newInterestOwed = newBalance - newPrincipal;
+    let newInterestOwed = prevInterestOwed - intPmt;
+
+    let newBalance = newPrincipal + newInterestOwed;
 
     let prevIntPmt = (prevBalance + intPmt) / 12;
     console.log(prevIntPmt);
@@ -216,11 +218,13 @@ class App extends React.Component {
       {
         principal: newPrincipal,
         totalBalance: newBalance,
+        prevInterestOwed: prevInterestOwed,
         interestOwed: newInterestOwed,
         interestRate: interestRate,
         intPmt: intPmt,
       },
       () => {
+        console.log(this.state.interestOwed);
         console.log(this.state.principal);
         console.log(this.state.intPmt);
         let pmtPlaceholderValue;
@@ -254,9 +258,7 @@ class App extends React.Component {
                 ((Number(this.state.interestRate) * 0.01) / 12)
             ).toFixed(2); */
             (
-              Number(this.state.principal) +
-              Number(this.state.principal) *
-                ((Number(this.state.interestRate) * 0.01) / 12)
+              Number(this.state.principal) + Number(this.state.interestOwed)
             ).toFixed(2);
         }
         console.log(Number(this.state.intPmt) + Number(this.state.principal));
@@ -267,10 +269,13 @@ class App extends React.Component {
           Number(this.state.principal) *
             ((Number(this.state.interestRate) * 0.01) / 12)
         ).toFixed(2);
-        document.getElementById("payment").max = (
+        /* document.getElementById("payment").max = (
           Number(this.state.principal) +
           Number(this.state.principal) *
             ((Number(this.state.interestRate) * 0.01) / 12)
+        ).toFixed(2); */
+        document.getElementById("payment").max = (
+          Number(this.state.principal) + Number(this.state.interestOwed)
         ).toFixed(2);
       }
     );
