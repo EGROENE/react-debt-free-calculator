@@ -25,9 +25,9 @@ class PaymentHistory extends React.Component {
                         maximumFractionDigits: 2})  }</p>
                         <p key={pmt.transactionNumber + 'currentPayment'}>Total Current Payment: ${ pmt.payment.toLocaleString(undefined,{minimumFractionDigits: 2,
                         maximumFractionDigits: 2})  }</p>
-                        <p key={pmt.transactionNumber + 'principal'}>New Principal: ${pmt.principal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
-                        <p key={pmt.transactionNumber + 'interestOwed'}>Total Interest Owed: ${pmt.interestOwed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
-                        <p key={pmt.transactionNumber + 'newBalance'}>New Balance: ${ pmt.newBalance.toLocaleString(undefined,{minimumFractionDigits: 2,
+                        <p key={pmt.transactionNumber + 'principal'}>Current Principal: ${pmt.principal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                        <p key={pmt.transactionNumber + 'interestOwed'}>Current Interest Owed: ${pmt.interestOwed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                        <p key={pmt.transactionNumber + 'newBalance'}>Current Balance: ${ pmt.newBalance.toLocaleString(undefined,{minimumFractionDigits: 2,
                         maximumFractionDigits: 2})  }</p>
                         {pmt.remainingPayments > 0
                             ? <p key={pmt.transactionNumber + 'remainingPayments'}>Approximate payments remaining, based on current payment: {pmt.remainingPayments} (final payment may be less).</p>
