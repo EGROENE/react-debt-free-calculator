@@ -37,16 +37,16 @@ class App extends React.Component {
       },
       () => {
         let minPrincipalPayment = Number(this.state.principal) * 0.01;
-        console.log(minPrincipalPayment);
 
         let intPmt =
           this.state.principal * ((this.state.interestRate * 0.01) / 12);
 
         let totalMinimumPayment = minPrincipalPayment + intPmt;
 
-        let totalBalance =
-          Number(this.state.principal) + Number(this.state.interestOwed);
+        let totalBalance;
         if (pmtCounter > 0) {
+          totalBalance =
+            Number(this.state.principal) + Number(this.state.interestOwed);
         } else {
           totalBalance =
             this.state.principal * (this.state.interestRate / 100 + 1);
