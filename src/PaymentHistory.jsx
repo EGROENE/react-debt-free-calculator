@@ -1,12 +1,8 @@
 import React from 'react';
 
-// Loop thru paymentDetails and display item containing necessary infos from each object in this array
-
-// Find way to access paymentDetails
 class PaymentHistory extends React.Component {
     render() {
         const { paymentsArray } = this.props;
-        console.log(paymentsArray)
         return (
             <div id='paymentHistory'>
                 {paymentsArray.map((pmt) => (

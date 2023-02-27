@@ -4,31 +4,25 @@ import PaymentHistory from "./PaymentHistory";
 
 let pmtCounter = 0;
 class App extends React.Component {
-  //paymentInfo;
-
   constructor(props) {
     super(props);
-    // Find a way to give both components access to this state
-    // Declare state in main comp, if child updates these state values
-    // Method updatePmt() - pass as prop into child. Call onchange of fields in PaymentForm
 
-    // Each state var should correspond with an input field of the same name:
     this.state = {
       prevPrincipal: "",
       principal: "",
-      interestRate: "",
-      prevIntPmt: "",
-      intPmt: "",
       minPrincipalPayment: "",
-      totalMinimumPayment: "",
-      totalBalance: "",
       principalPmt: "",
-      payment: "",
-      transactionNumber: "",
-      prevBalance: "",
+      interestRate: "",
       prevInterestOwed: "",
       interestOwed: "",
+      prevIntPmt: "",
+      intPmt: "",
+      totalMinimumPayment: "",
+      payment: "",
+      prevBalance: "",
+      totalBalance: "",
       newBalance: "",
+      transactionNumber: "",
       paymentsArray: [],
       paymentDate: "",
       remainingPayments: "",
@@ -50,8 +44,6 @@ class App extends React.Component {
 
         let totalMinimumPayment = minPrincipalPayment + intPmt;
 
-        /* let totalBalance =
-          this.state.principal * (this.state.interestRate / 100 + 1); */
         let totalBalance =
           Number(this.state.principal) + Number(this.state.interestOwed);
         if (pmtCounter > 0) {
@@ -59,7 +51,6 @@ class App extends React.Component {
           totalBalance =
             this.state.principal * (this.state.interestRate / 100 + 1);
         }
-        console.log(totalBalance);
 
         let interestOwed = totalBalance - this.state.principal;
 
@@ -72,27 +63,15 @@ class App extends React.Component {
             interestOwed: interestOwed,
           },
           () => {
-            console.log(this.state.principal);
-            console.log(this.state.intPmt);
-            console.log(this.state.minPrincipalPayment);
-            console.log(this.state.totalMinimumPayment);
-            console.log(this.state.totalBalance);
-            // If total balance is less than or equal to 100.00, automatically populate payment field with total remaining balance (incl. interest) & disable it.
             if (this.state.totalBalance > 100) {
               document.getElementById("payment").textContent = Number(
                 this.state.principalPmt + this.state.intPmt
               ).toFixed(2);
-              //document.getElementById("payment").removeAttribute("disabled");
             } else if (
               this.state.totalBalance > 0 &&
               this.state.totalBalance <= 100
             ) {
-              this.setState({ payment: this.state.totalBalance }, () => {
-                console.log(this.state.payment);
-                /* document.getElementById("payment").textContent = Number(
-                  this.state.payment
-                ).toFixed(2); */
-              });
+              this.setState({ payment: this.state.totalBalance });
             }
           }
         );
@@ -103,26 +82,8 @@ class App extends React.Component {
   handleSubmission = (event) => {
     event.preventDefault();
     pmtCounter++;
-    console.log(pmtCounter);
     this.updatePaymentInfo();
-    console.log(this.state.totalBalance);
     document.getElementById("paymentForm").reset();
-    /*     let pmtPlaceholder = document.getElementById("payment").placeholder;
-    if (this.state.totalBalance > 100) {
-      pmtPlaceholder =
-        this.state.principal * (this.state.interestRate / 100 + 1).toFixed(2);
-    } else {
-      pmtPlaceholder =
-        "$" +
-        (
-          Number(this.state.principal) * 0.01 +
-          Number(this.state.principal) *
-            ((Number(this.state.interestRate) * 0.01) / 12)
-        ).toFixed(2) +
-        " - " +
-        "$" +
-        (this.state.principal * (this.state.interestRate / 100 + 1)).toFixed(2);
-    } */
     document.getElementById("debtPrincipal").setAttribute("disabled", "true");
     document.getElementById("interestRate").setAttribute("disabled", "true");
   };
@@ -131,8 +92,6 @@ class App extends React.Component {
     let interestRate = this.state.interestRate;
     let intPmt = Number(this.state.intPmt);
 
-    /* let prevBalance =
-      this.state.principal * (this.state.interestRate / 100 + 1); */
     let prevBalance = this.state.totalBalance;
 
     let totalBalance = this.state.totalBalance;
@@ -141,48 +100,21 @@ class App extends React.Component {
 
     console.log(this.state.payment);
     let payment = Number(this.state.payment);
-    // if current payment - intPmt >= this.state.principal, then currentPayment should equal intPmt + this.state.principal
-    /* let currentPayment;
-    if (this.state.payment - intPmt >= this.state.principal) {
-      currentPayment = this.state.principal + intPmt;
-    } else {
-      currentPayment = Number(this.state.payment);
-    } */
 
-    console.log(this.state.intPmt);
     let principalPmt = currentPayment - this.state.intPmt;
-    console.log(principalPmt.toFixed(2));
-
-    //let newBalance = prevBalance - this.state.payment;
-    /* let newBalance = (
-      this.state.principal *
-      (this.state.interestRate / 100 + 1)
-    ).toFixed(2); */
-    //let newBalance = totalBalance - currentPayment;
 
     let prevPrincipal = Number(this.state.principal);
 
-    //let newPrincipal = this.state.principal - principalPmt;
     let newPrincipal = prevPrincipal - principalPmt;
-    console.log(newPrincipal);
     if (newPrincipal < 1) {
       newPrincipal -= 0 + newPrincipal;
     }
-    console.log(this.state.intPmt);
-    console.log(newPrincipal);
 
     let prevInterestOwed = Number(this.state.interestOwed);
-    console.log(prevInterestOwed);
-    //let newInterestOwed = newBalance - newPrincipal;
     let newInterestOwed = prevInterestOwed - intPmt;
 
     let newBalance = newPrincipal + newInterestOwed;
 
-    let prevIntPmt = (prevBalance + intPmt) / 12;
-    console.log(prevIntPmt);
-
-    console.log(currentPayment);
-    console.log(prevBalance);
     if (currentPayment === prevBalance) {
       principalPmt = prevPrincipal;
       intPmt = currentPayment - principalPmt;
@@ -190,10 +122,6 @@ class App extends React.Component {
       newInterestOwed = 0;
       newBalance = 0;
     }
-    console.log(intPmt);
-    console.log(newPrincipal);
-    console.log(newInterestOwed);
-    console.log(newBalance);
 
     let paymentDate = new Date();
 
@@ -256,9 +184,6 @@ class App extends React.Component {
         console.log(this.state.intPmt);
         let pmtPlaceholderValue;
         if (this.state.totalBalance <= 100) {
-          /* pmtPlaceholderValue =
-            this.state.principal *
-            (this.state.interestRate / 100 + 1).toFixed(2); */
           pmtPlaceholderValue = (
             Number(this.state.principal) +
             (Number(this.state.principal) * Number(this.state.interestRate)) /
@@ -273,17 +198,7 @@ class App extends React.Component {
                 ((Number(this.state.interestRate) * 0.01) / 12)
             ).toFixed(2) +
             " - " +
-            /* "$" +
-            (
-              this.state.principal *
-              (this.state.interestRate / 100 + 1)
-            ).toFixed(2); */
             "$" +
-            /* (
-              Number(this.state.principal) +
-              Number(this.state.principal) *
-                ((Number(this.state.interestRate) * 0.01) / 12)
-            ).toFixed(2); */
             (
               Number(this.state.principal) + Number(this.state.interestOwed)
             ).toFixed(2);
@@ -296,11 +211,6 @@ class App extends React.Component {
           Number(this.state.principal) *
             ((Number(this.state.interestRate) * 0.01) / 12)
         ).toFixed(2);
-        /* document.getElementById("payment").max = (
-          Number(this.state.principal) +
-          Number(this.state.principal) *
-            ((Number(this.state.interestRate) * 0.01) / 12)
-        ).toFixed(2); */
         document.getElementById("payment").max = (
           Number(this.state.principal) + Number(this.state.interestOwed)
         ).toFixed(2);
@@ -345,14 +255,6 @@ class App extends React.Component {
               id="payment"
               type="number"
               step="0.01"
-              /* min={(
-                Number(this.state.interestRate / 12) +
-                Number(this.state.principal * 0.01)
-              ).toFixed(2)} */
-              /* min={(
-                Number(this.state.intPmt) + Number(this.state.principalPmt)
-              ).toFixed(2)} */
-              // IF TOTALBALANCE IS LESS THAN OVER 100, ETC. - SEE CONDITIONAL RENDER IN PAYMENTHISTORY
               min={
                 this.state.totalBalance > 100
                   ? Number(this.state.totalMinimumPayment).toFixed(2)
@@ -368,13 +270,6 @@ class App extends React.Component {
                   : Number(this.state.totalBalance).toFixed(2)
               }
               onChange={this.handleChange}
-              /* placeholder={
-                "min: " +
-                (
-                  Number(this.state.interestRate / 12) +
-                  Number(this.state.principal * 0.01)
-                ).toFixed(2)
-              } */
               placeholder={
                 this.state.totalBalance <= 100 && this.state.totalBalance > 0
                   ? (
