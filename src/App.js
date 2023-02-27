@@ -184,10 +184,13 @@ class App extends React.Component {
     console.log(currentPayment);
     console.log(prevBalance);
     if (currentPayment === prevBalance) {
+      principalPmt = prevPrincipal;
+      intPmt = currentPayment - principalPmt;
       newPrincipal = 0;
       newInterestOwed = 0;
       newBalance = 0;
     }
+    console.log(intPmt);
     console.log(newPrincipal);
     console.log(newInterestOwed);
     console.log(newBalance);
