@@ -113,32 +113,41 @@ class App extends React.Component {
   };
 
   updatePaymentInfo = () => {
-    let interestRate = this.state.interestRate;
+    // Interest payment is set to current state value of intPmt. This variable will be passed as value of same state below, when the payment is made, as this method is called upon submission.
     let intPmt = Number(this.state.intPmt);
 
+    // Current total balance (a.k.a. the total balance before current payment is made) will be passed to value of state prevBalance below.
     let prevBalance = this.state.totalBalance;
 
-    let totalBalance = this.state.totalBalance;
+    //let totalBalance = this.state.totalBalance;
 
+    // Used to pass value of current payment to the payment state item (which will be pushed to array used by payment history component), and in other variable declarations below, which will be used to set state, in order to keep code neat.
     let currentPayment = Number(this.state.payment);
 
-    console.log(this.state.payment);
-    let payment = Number(this.state.payment);
+    // Calculate current payment against principal:
+    let principalPmt = currentPayment - intPmt;
 
-    let principalPmt = currentPayment - this.state.intPmt;
-
+    // Get value of current principal (value before current payment is made):
     let prevPrincipal = Number(this.state.principal);
 
+    // Calculate new principal:
     let newPrincipal = prevPrincipal - principalPmt;
-    if (newPrincipal < 1) {
+
+    // If new principal is negative (likely due to a far-off decimal value), adjust new principal value to equal 0:
+    if (newPrincipal < 0) {
       newPrincipal -= 0 + newPrincipal;
     }
 
+    // Get value of current principal (value before current payment is made):
     let prevInterestOwed = Number(this.state.interestOwed);
+
+    // Get new interest balance. (after current payment is made):
     let newInterestOwed = prevInterestOwed - intPmt;
 
+    // Get new total balance (after current payment is made):
     let newBalance = newPrincipal + newInterestOwed;
 
+    // If current payment is equal to total current balance (labeled as previous balance to make rendering HTML less confusing), then payment on principal should equal the current principal balance, interest payment should equal total current payment minus the principal payment, and new principal balance, new interest balance, and new total balance (all of which are the balances after the current payment is made), should all equal 0.
     if (currentPayment === Number(prevBalance.toFixed(2))) {
       principalPmt = prevPrincipal;
       intPmt = currentPayment - principalPmt;
@@ -147,6 +156,7 @@ class App extends React.Component {
       newBalance = 0;
     }
 
+    // Get the date and time of when user submits payment:
     let paymentDate = new Date();
 
     // Create random 13-digit transaction number:
@@ -156,35 +166,38 @@ class App extends React.Component {
       transactionNumber += digits[Math.floor(Math.random() * 9)];
     }
 
+    // Calculate approximate remaining payments. Will only be used (for now) to let the user know when they are debt-free, that is, if this value is equal to 0.
     let remainingPayments = Math.ceil((newBalance / currentPayment).toFixed(5));
 
+    // Initialize array containing any and all values of the array corresponding to any infos from previous payments. Values from current payment will be pushed here, and its state will be set so that values from current payment will also be included in this array in any future payments. This array will be looped through to create items in payment history.
     const newArray = [...this.state.paymentsArray];
+    // Push infos from current payment to new array:
     newArray.push({
       transactionNumber: transactionNumber,
       paymentDate: paymentDate,
       prevBalance: prevBalance,
-      totalBalance: totalBalance,
+      //totalBalance: totalBalance,
       prevInterestOwed: prevInterestOwed,
       interestOwed: newInterestOwed,
       principalPmt: principalPmt,
       intPmt: intPmt,
-      payment: payment,
+      payment: currentPayment,
       newBalance: newBalance,
       prevPrincipal: prevPrincipal,
       principal: newPrincipal,
       remainingPayments: remainingPayments,
     });
 
+    // Set state with values from current payment. The 'prev' parameter and corresponding rest operator is used in order to access previous state value of payments array & to set the state of that array to the new array, which is defined above.
     this.setState((prev) => ({
       transactionNumber: transactionNumber,
       paymentDate: paymentDate,
       prevBalance: prevBalance,
-      totalBalance: totalBalance,
+      //totalBalance: totalBalance,
       prevInterestOwed: prevInterestOwed,
       interestOwed: newInterestOwed,
       principalPmt: principalPmt,
       intPmt: intPmt,
-      //payment: currentPayment,
       newBalance: newBalance,
       prevPrincipal: prevPrincipal,
       principal: newPrincipal,
@@ -193,25 +206,27 @@ class App extends React.Component {
       paymentsArray: newArray,
     }));
 
+    // Set state of new current principal balance, total balance, previous interest owed, and previous principal to be displayed in the history items pertaining to any future payments:
     this.setState(
       {
         principal: newPrincipal,
         totalBalance: newBalance,
         prevInterestOwed: prevInterestOwed,
+        prevPrincipal: prevPrincipal,
         interestOwed: newInterestOwed,
-        interestRate: interestRate,
-        intPmt: intPmt,
       },
       () => {
-        console.log(this.state.interestOwed);
-        console.log(this.state.principal);
-        console.log(this.state.intPmt);
+        // Set value of placeholder of payment field to either the total remaining balance if under 100 or a min-max range if over 100.
         let pmtPlaceholderValue;
         if (this.state.totalBalance <= 100) {
-          pmtPlaceholderValue = (
-            Number(this.state.principal) +
-            (Number(this.state.principal) * Number(this.state.interestRate)) /
-              12
+          pmtPlaceholderValue = Number(this.state.totalBalance).toFixed(2);
+          // Set value of min accepted value in payment field when total balance is over 100:
+          document.getElementById("payment").min = (
+            Number(this.state.principal) + Number(this.state.interestOwed)
+          ).toFixed(2);
+          // Set value of payment field to remaining balance (user cannot change it):
+          document.getElementById("payment").value = (
+            Number(this.state.principal) + Number(this.state.interestOwed)
           ).toFixed(2);
         } else {
           pmtPlaceholderValue =
@@ -226,15 +241,16 @@ class App extends React.Component {
             (
               Number(this.state.principal) + Number(this.state.interestOwed)
             ).toFixed(2);
+          // Set value of min accepted value in payment field when total balance is over 100:
+          document.getElementById("payment").min = (
+            Number(this.state.principal) * 0.01 +
+            Number(this.state.principal) *
+              ((Number(this.state.interestRate) * 0.01) / 12)
+          ).toFixed(2);
         }
-        console.log(Number(this.state.intPmt) + Number(this.state.principal));
-        console.log(pmtPlaceholderValue);
+        // Apply whichever placeholder value applies to the situation, to the placeholder of the payment field:
         document.getElementById("payment").placeholder = pmtPlaceholderValue;
-        document.getElementById("payment").min = (
-          Number(this.state.principal) * 0.01 +
-          Number(this.state.principal) *
-            ((Number(this.state.interestRate) * 0.01) / 12)
-        ).toFixed(2);
+        // Set max accepted value in payment field (will always be this):
         document.getElementById("payment").max = (
           Number(this.state.principal) + Number(this.state.interestOwed)
         ).toFixed(2);
