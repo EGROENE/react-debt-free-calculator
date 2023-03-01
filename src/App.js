@@ -271,7 +271,7 @@ class App extends React.Component {
               type="number"
               min="1"
               step="0.01"
-              placeholder="Loan amount"
+              placeholder="Debt Principal"
               required
             />
             <br />
@@ -282,7 +282,7 @@ class App extends React.Component {
               name="interestRate"
               type="number"
               step="0.01"
-              placeholder="Interest rate"
+              placeholder="Interest Rate"
               required
             />
             <br />
