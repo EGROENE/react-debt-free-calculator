@@ -288,7 +288,7 @@ class App extends React.Component {
             <br />
             <label htmlFor="payment">
               How much would you like to pay? (min: 1% * principal + monthly
-              interest; max: remaining principal + monthly interest)
+              interest; max: remaining principal + remaining interest)
             </label>
             <input
               name="payment"
