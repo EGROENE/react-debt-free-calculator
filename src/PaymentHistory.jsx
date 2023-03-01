@@ -25,9 +25,7 @@ class PaymentHistory extends React.Component {
                         <p key={pmt.transactionNumber + 'interestOwed'}>Current Interest Owed: ${pmt.interestOwed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
                         <p key={pmt.transactionNumber + 'newBalance'}>Current Balance: ${ pmt.newBalance.toLocaleString(undefined,{minimumFractionDigits: 2,
                         maximumFractionDigits: 2})  }</p>
-                        {pmt.remainingPayments > 0
-                            ? <p key={pmt.transactionNumber + 'remainingPayments'}>Approximate payments remaining, based on current payment: {pmt.remainingPayments} (final payment may be less).</p>
-                            : <p key={pmt.transactionNumber + 'remainingPayments'}>You're debt-free!</p>
+                        {pmt.remainingPayments === 0 && <p key={pmt.transactionNumber + 'remainingPayments'}>You're debt-free!</p>
                         }
                     </div>
                 ))} 
