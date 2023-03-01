@@ -219,8 +219,14 @@ class App extends React.Component {
         // Set value of placeholder of payment field to either the total remaining balance if under 100 or a min-max range if over 100.
         let pmtPlaceholderValue;
         if (this.state.totalBalance <= 100) {
-          pmtPlaceholderValue = Number(this.state.totalBalance).toFixed(2);
-          // Set value of min accepted value in payment field when total balance is over 100:
+          pmtPlaceholderValue = Number(this.state.totalBalance).toLocaleString(
+            undefined,
+            {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }
+          );
+          // Set value of min accepted value in payment field when total balance is less than or equal to 100:
           document.getElementById("payment").min = (
             Number(this.state.principal) + Number(this.state.interestOwed)
           ).toFixed(2);
@@ -235,18 +241,23 @@ class App extends React.Component {
               Number(this.state.principal) * 0.01 +
               Number(this.state.principal) *
                 ((Number(this.state.interestRate) * 0.01) / 12)
-            ).toFixed(2) +
+            ).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }) +
             " - " +
             "$" +
             (
               Number(this.state.principal) + Number(this.state.interestOwed)
-            ).toFixed(2);
+            ).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
           // Set value of min accepted value in payment field when total balance is over 100:
-          document.getElementById("payment").min = (
+          document.getElementById("payment").min =
             Number(this.state.principal) * 0.01 +
             Number(this.state.principal) *
-              ((Number(this.state.interestRate) * 0.01) / 12)
-          ).toFixed(2);
+              ((Number(this.state.interestRate) * 0.01) / 12);
         }
         // Apply whichever placeholder value applies to the situation, to the placeholder of the payment field:
         document.getElementById("payment").placeholder = pmtPlaceholderValue;
@@ -262,83 +273,111 @@ class App extends React.Component {
     return (
       <div id="hero" className="App">
         <header className="App-header">
+          <div id="page-header">
+            <img
+              src="./logo192.png"
+              alt="react-logo-header"
+              class="App-logo"
+            ></img>
+            <h1>React Debt-Free Calculator</h1>
+          </div>
           <form id="paymentForm" onSubmit={this.handleSubmission}>
-            <label htmlFor="principal">How much is your debt principal?</label>
-            <input
-              id="debtPrincipal"
-              onChange={this.handleChange}
-              name="principal"
-              type="number"
-              min="1"
-              step="0.01"
-              placeholder="Debt Principal"
-              required
-            />
-            <br />
-            <label htmlFor="interestRate">How much is the interest rate?</label>
-            <input
-              onChange={this.handleChange}
-              id="interestRate"
-              name="interestRate"
-              type="number"
-              step="0.01"
-              placeholder="Interest Rate"
-              required
-            />
-            <br />
-            <label htmlFor="payment">
-              How much would you like to pay? (min: 1% * principal + monthly
-              interest; max: remaining principal + remaining interest)
-            </label>
-            <input
-              name="payment"
-              id="payment"
-              type="number"
-              step="0.01"
-              min={
-                this.state.totalBalance > 100
-                  ? Number(this.state.totalMinimumPayment).toFixed(2)
-                  : Number(this.state.totalBalance).toFixed(2)
-              }
-              max={
-                this.state.totalBalance > 100
-                  ? "$" +
-                    (
-                      this.state.principal *
-                      (this.state.interestRate / 100 + 1)
-                    ).toFixed(2)
-                  : Number(this.state.totalBalance).toFixed(2)
-              }
-              onChange={this.handleChange}
-              placeholder={
-                this.state.totalBalance <= 100 && this.state.totalBalance > 0
-                  ? (
-                      Number(this.state.principal) *
-                      (Number(this.state.interestRate) / 100 + 1)
-                    ).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  : "$" +
-                    (
-                      Number(this.state.principal) * 0.01 +
-                      Number(this.state.principal) *
-                        ((Number(this.state.interestRate) * 0.01) / 12)
-                    ).toFixed(2) +
-                    " - " +
-                    "$" +
-                    (
-                      this.state.principal *
-                      (this.state.interestRate / 100 + 1)
-                    ).toFixed(2)
-              }
-              required
-            />
-            <br />
-            <button type="reset" onClick={this.resetForm}>
-              Reset All Fields
-            </button>
-            <button type="submit">Submit Payment</button>
+            <div class="form-row">
+              <div class="form-item">
+                <label htmlFor="principal">
+                  How much is your debt principal?
+                </label>
+                <input
+                  id="debtPrincipal"
+                  onChange={this.handleChange}
+                  name="principal"
+                  type="number"
+                  min="1"
+                  step="0.01"
+                  placeholder="Debt Principal"
+                  required
+                />
+              </div>
+              <div class="form-item">
+                <label htmlFor="interestRate">
+                  How much is the interest rate?
+                </label>
+                <input
+                  onChange={this.handleChange}
+                  id="interestRate"
+                  name="interestRate"
+                  type="number"
+                  step="0.01"
+                  placeholder="Interest Rate"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-item">
+              <label htmlFor="payment">
+                How much would you like to pay? <br />{" "}
+                <span class="sublabel">
+                  (MIN: 1% * principal + monthly interest; MAX: remaining
+                  principal + remaining interest)
+                </span>
+              </label>
+              <input
+                name="payment"
+                id="payment"
+                type="number"
+                step="0.01"
+                min={
+                  this.state.totalBalance > 100
+                    ? Number(this.state.totalMinimumPayment).toFixed(2)
+                    : Number(this.state.totalBalance).toFixed(2)
+                }
+                max={
+                  this.state.totalBalance > 100
+                    ? "$" +
+                      (
+                        this.state.principal *
+                        (this.state.interestRate / 100 + 1)
+                      ).toFixed(2)
+                    : Number(this.state.totalBalance).toFixed(2)
+                }
+                onChange={this.handleChange}
+                placeholder={
+                  this.state.totalBalance <= 100 && this.state.totalBalance > 0
+                    ? (
+                        Number(this.state.principal) *
+                        (Number(this.state.interestRate) / 100 + 1)
+                      ).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })
+                    : "$" +
+                      (
+                        Number(this.state.principal) * 0.01 +
+                        Number(this.state.principal) *
+                          ((Number(this.state.interestRate) * 0.01) / 12)
+                      ).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }) +
+                      " - " +
+                      "$" +
+                      (
+                        this.state.principal *
+                        (this.state.interestRate / 100 + 1)
+                      ).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })
+                }
+                required
+              />
+            </div>
+            <div id="buttons-container">
+              <button type="reset" onClick={this.resetForm}>
+                Reset All Fields
+              </button>
+              <button type="submit">Submit Payment</button>
+            </div>
           </form>
           <PaymentHistory {...this.state} />
         </header>

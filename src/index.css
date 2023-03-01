@@ -1,8 +1,27 @@
+:root {
+  --size-4: 0.25rem;
+  --size-8: 0.5rem;
+  --size-12: 0.75rem;
+  --size-16: 1rem;
+  --size-20: 1.25rem;
+  --size-24: 1.5rem;
+  --size-28: 1.75rem;
+  --size-32: 2rem;
+  --size-36: 2.25rem;
+  --size-40: 2.5rem;
+  --size-42: 2.75rem;
+  --size-48: 3rem;
+  --size-56: 3.5rem;
+  --size-64: 4rem;
+  --react-blue: #61DBFB
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    sans-serif; */
+  font-family: 'Rajdhani', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -10,4 +29,96 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+  font-family: 'Rajdhani', monospace;
+}
+
+#page-header h1 {
+  margin: 0;
+}
+
+#paymentForm {
+  margin-bottom: var(--size-24);
+}
+
+#paymentForm div {
+  margin: var(--size-8) auto;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: var(--size-64);
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--size-16);
+}
+
+#payment {
+  width: 25%;
+}
+
+label {
+  font-size: var(--size-36);
+}
+
+.sublabel {
+  font-size: var(--size-24);
+}
+
+input {
+  font-family: 'Rajdhani', monospace;
+  padding: var(--size-8);
+  background: black;
+  border: 1px solid white;
+  color: white;
+  font-size: var(--size-24);
+  margin-top: var(--size-8);
+  font-weight: 700;
+}
+
+input:focus {
+  box-shadow: 0px 0px 10px 2px var(--react-blue);
+}
+
+input:disabled {
+  background-color: white;
+  opacity: 0.2;
+}
+
+input:disabled:hover {
+  cursor: not-allowed;
+}
+
+#buttons-container {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 10px auto;
+  width: 50%;
+  align-items: center;
+}
+
+button {
+  background: black;
+  color: white;
+  padding: var(--size-12);
+  font-size: var(--size-20);
+  font-family: 'Rajdhani';
+  font-weight: 700;
+  border: 2px solid white;
+}
+
+button:hover {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 200ms;
+}
+
+button[type = "submit"] {
+  background-color: var(--react-blue);
+  color: black;
+  border: 2px solid black;
 }
