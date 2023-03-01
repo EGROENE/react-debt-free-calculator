@@ -30,19 +30,26 @@ class App extends React.Component {
   }
 
   // Since document DOM is not used in React, this is how to get the value of an input (whichever input handleChange() is applied to)
+  // 'name' corresponds to the name of the input field in question. 'value' is set to whatever in input. Both are destructured immediately from 'target'. States of principal, interestRate (this method is called only on the initial payment, when the previous two fields are changed, as they are disabled after first payment is submitted), and payment are set, as this method is called when these fields change.
   handleChange = ({ target: { name, value } }) => {
     this.setState(
       {
         [`${name}`]: value,
       },
       () => {
+        // The below code executes with setState above:
+
+        // Calculate minimum payment on principal:
         let minPrincipalPayment = Number(this.state.principal) * 0.01;
 
+        // Calculate interest payment:
         let intPmt =
           this.state.principal * ((this.state.interestRate * 0.01) / 12);
 
+        // Calculate total minimum payment:
         let totalMinimumPayment = minPrincipalPayment + intPmt;
 
+        // If at least one payment has been made, the total balance is equal to the current principal (which is set anew with each payment) plus the current interest owed, which also is set anew with each payment. This takes into account payments that have been made. If total balance is calculated based on the current principal, (which could be 0, in case the user pays off the entire principal in one payment), it could be inaccurate. The variable newInterestOwed is passed to state value interestOwed inside the updatePaymentInfo below, so see the declaration of newInterestOwed for more information.
         let totalBalance;
         if (pmtCounter > 0) {
           totalBalance =
@@ -52,6 +59,8 @@ class App extends React.Component {
             this.state.principal * (this.state.interestRate / 100 + 1);
         }
 
+        // Initialize interestOwed. This will be passed to state value of the same name below.
+        // This does account for changes to the total balance & to the principal after payments are made.
         let interestOwed = totalBalance - this.state.principal;
 
         this.setState(
@@ -63,7 +72,8 @@ class App extends React.Component {
             interestOwed: interestOwed,
           },
           () => {
-            if (this.state.totalBalance > 100) {
+            // If total balance is more than 100.00, then the
+            /* if (this.state.totalBalance > 100) {
               document.getElementById("payment").textContent = Number(
                 this.state.principalPmt + this.state.intPmt
               ).toFixed(2);
@@ -72,7 +82,16 @@ class App extends React.Component {
               this.state.totalBalance <= 100
             ) {
               this.setState({ payment: this.state.totalBalance });
-            }
+            } */
+            /* if (
+              this.state.totalBalance > 0 &&
+              this.state.totalBalance <= 100.0
+            ) {
+              document.getElementById("payment").textContent = Number(
+                this.state.principalPmt + this.state.intPmt
+              ).toFixed(2);
+              this.setState({ payment: this.state.totalBalance });
+            } */
           }
         );
       }
@@ -80,10 +99,15 @@ class App extends React.Component {
   };
 
   handleSubmission = (event) => {
+    // Prevent default handling of form submission, including reload of page:
     event.preventDefault();
+    // Increase pmtCounter by 1 with each payment:
     pmtCounter++;
+    // Update values upon payment:
     this.updatePaymentInfo();
+    // Reset the form:
     document.getElementById("paymentForm").reset();
+    // Disable the principal & interest rate input fields upon payment:
     document.getElementById("debtPrincipal").setAttribute("disabled", "true");
     document.getElementById("interestRate").setAttribute("disabled", "true");
   };
@@ -115,7 +139,7 @@ class App extends React.Component {
 
     let newBalance = newPrincipal + newInterestOwed;
 
-    if (currentPayment === prevBalance) {
+    if (currentPayment === Number(prevBalance.toFixed(2))) {
       principalPmt = prevPrincipal;
       intPmt = currentPayment - principalPmt;
       newPrincipal = 0;
