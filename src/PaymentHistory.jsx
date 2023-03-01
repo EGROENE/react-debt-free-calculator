@@ -2,6 +2,7 @@ import React from 'react';
 
 class PaymentHistory extends React.Component {
     render() {
+        // 'Import' paymentsArray from App.js, which is passed on thru props, and deconstruct immediately:
         const { paymentsArray } = this.props;
         return (
             <div id='paymentHistory'>
