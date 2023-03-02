@@ -288,14 +288,6 @@ class App extends React.Component {
           document.getElementById("payment").max = Number(
             this.state.totalBalance
           ).toFixed(2);
-          // Set value of payment field to remaining balance (user cannot change it, due to min/max being set above):
-          document.getElementById("payment").value = Number(
-            this.state.totalBalance
-          ).toFixed(2);
-          // Automatically populate payment field if total balance is less than or equal to 100:
-          document.getElementById("payment").textContent = Number(
-            this.state.totalBalance
-          ).toFixed(2);
         } else {
           console.log(this.state.intPmt);
           console.log(this.state.principal);
@@ -334,7 +326,11 @@ class App extends React.Component {
         console.log(Number(this.state.intPmt));
         console.log(this.state.principal);
         document.getElementById("payment").placeholder = pmtPlaceholderValue;
-        console.log(this.state.principal.toFixed(2));
+        console.log(Number(this.state.totalBalance));
+        // Disable payment field after final payment is made:
+        if (Number(this.state.totalBalance) === 0) {
+          document.getElementById("payment").setAttribute("disabled", "true");
+        }
       }
     );
   };
