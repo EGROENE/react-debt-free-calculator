@@ -330,6 +330,8 @@ class App extends React.Component {
         // Disable payment field after final payment is made:
         if (Number(this.state.totalBalance) === 0) {
           document.getElementById("payment").setAttribute("disabled", "true");
+          document.getElementById("resetBtn").setAttribute("disabled", "true");
+          document.getElementById("submitBtn").setAttribute("disabled", "true");
         }
       }
     );
@@ -438,10 +440,12 @@ class App extends React.Component {
               />
             </div>
             <div id="buttons-container">
-              <button type="reset" onClick={this.resetForm}>
+              <button type="reset" id="resetBtn" onClick={this.resetForm}>
                 Reset All Fields
               </button>
-              <button type="submit">Submit Payment</button>
+              <button type="submit" id="submitBtn">
+                Submit Payment
+              </button>
             </div>
           </form>
           <PaymentHistory {...this.state} />
