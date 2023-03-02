@@ -378,7 +378,6 @@ class App extends React.Component {
                   name="interestRate"
                   type="number"
                   step="0.001"
-                  min="0.001"
                   placeholder="Interest Rate"
                   required
                 />
