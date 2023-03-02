@@ -2,13 +2,12 @@ import React from "react";
 import "./App.css";
 import PaymentHistory from "./PaymentHistory";
 
-let pmtCounter = 0;
+//let pmtCounter = 0;
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      originalPrincipal: "",
       prevPrincipal: "",
       principal: "",
       minPrincipalPayment: "",
@@ -41,8 +40,6 @@ class App extends React.Component {
         // The below code executes with setState above:
         console.log(this.state.principal);
 
-        let originalPrincipal = document.getElementById("debtPrincipal").value;
-
         // Calculate minimum payment on principal:
         let minPrincipalPayment = Number(this.state.principal) * 0.01;
 
@@ -55,34 +52,29 @@ class App extends React.Component {
         /* let intPmt =
           Number(Number(this.state.principal) * Number(this.state.interestRate) / 100 / (12 - pmtCounter)); */
 
-        // If at least one payment has been made, the total balance is equal to the current principal (which is set anew with each payment) plus the current interest owed, which also is set anew with each payment. This takes into account payments that have been made. If total balance is calculated based on the current principal, (which could be 0, in case the user pays off the entire principal in one payment), it could be inaccurate. The variable newInterestOwed is passed to state value interestOwed inside the updatePaymentInfo below, so see the declaration of newInterestOwed for more information.
-        let totalBalance;
-        if (pmtCounter > 0) {
-          originalPrincipal = Number(
-            Number(this.state.originalPrincipal).toFixed(2)
-          );
-          totalBalance =
-            Number(this.state.principal) + Number(this.state.interestOwed);
-        } else {
-          originalPrincipal = Number(
-            Number(document.getElementById("debtPrincipal").value).toFixed(2)
-          );
-          totalBalance =
-            this.state.principal * (this.state.interestRate / 100 + 1);
-        }
-        intPmt = originalPrincipal * ((this.state.interestRate * 0.01) / 12);
+        let totalBalance = Number(
+          (
+            Number(this.state.principal) + Number(this.state.interestOwed)
+          ).toFixed(2)
+        );
+
+        intPmt = Number(
+          (
+            Number(this.state.principal) *
+            ((Number(this.state.interestRate) * 0.01) / 12)
+          ).toFixed(2)
+        );
         console.log(intPmt);
 
         // Initialize interestOwed. This will be passed to state value of the same name below.
-        // This does account for changes to the total balance & to the principal after payments are made.
-        let interestOwed = totalBalance - this.state.principal;
+        let interestOwed = intPmt;
+        console.log(interestOwed);
 
         // Calculate total minimum payment:
         let totalMinimumPayment = minPrincipalPayment + intPmt;
 
         this.setState(
           {
-            originalPrincipal: originalPrincipal,
             minPrincipalPayment: minPrincipalPayment,
             intPmt: intPmt,
             totalMinimumPayment: totalMinimumPayment,
@@ -162,8 +154,6 @@ class App extends React.Component {
   handleSubmission = (event) => {
     // Prevent default handling of form submission, including reload of page:
     event.preventDefault();
-    // Increase pmtCounter by 1 with each payment:
-    pmtCounter++;
     // Update values upon payment:
     this.updatePaymentInfo();
     // Reset the form:
@@ -182,12 +172,10 @@ class App extends React.Component {
     // Current total balance (a.k.a. the total balance before current payment is made) will be passed to value of state prevBalance below.
     let prevBalance = Number(this.state.totalBalance);
 
-    //let totalBalance = this.state.totalBalance;
-
-    // Used to pass value of current payment to the payment state item (which will be pushed to array used by payment history component), and in other variable declarations below, which will be used to set state, in order to keep code neat.
-    let intPmt = Number(Number(this.state.intPmt).toFixed(2));
+    //let intPmt = Number(Number(this.state.intPmt).toFixed(2));
+    let intPmt = Number(Number(this.state.interestOwed).toFixed(2));
     console.log(intPmt);
-    // If current payment is equal to total current balance (labeled as previous balance to make rendering HTML less confusing), then payment on principal should equal the current principal balance, interest payment should equal total current payment minus the principal payment, and new principal balance, new interest balance, and new total balance (all of which are the balances after the current payment is made), should all equal 0.
+
     let currentPayment = Number(Number(this.state.payment).toFixed(2));
     console.log(currentPayment);
 
@@ -197,11 +185,16 @@ class App extends React.Component {
     console.log(principalPmt);
 
     let newPrincipal = prevPrincipal - principalPmt;
-    // Get value of current principal (value before current payment is made):
+    console.log(newPrincipal);
+
     let prevInterestOwed = Number(Number(this.state.interestOwed).toFixed(2));
+    console.log(prevInterestOwed);
 
     // Get new interest balance. (after current payment is made):
-    let newInterestOwed = prevInterestOwed - intPmt;
+    console.log(this.state.interestRate / 100);
+    let newInterestOwed =
+      (newPrincipal * Number(this.state.interestRate)) / 100 / 12;
+    console.log(newInterestOwed);
 
     // Get new total balance (after current payment is made):
     let newBalance = newPrincipal + newInterestOwed;
@@ -288,24 +281,25 @@ class App extends React.Component {
             }
           );
           // Set value of min accepted value in payment field when total balance is less than or equal to 100:
-          document.getElementById("payment").min = (
-            Number(this.state.principal) + Number(this.state.interestOwed)
+          document.getElementById("payment").max = Number(
+            this.state.totalBalance
           ).toFixed(2);
           // Set value of max accepted value in payment field when total balance is less than or equal to 100:
-          document.getElementById("payment").max = (
-            Number(this.state.principal) + Number(this.state.interestOwed)
+          document.getElementById("payment").max = Number(
+            this.state.totalBalance
           ).toFixed(2);
           // Set value of payment field to remaining balance (user cannot change it, due to min/max being set above):
-          document.getElementById("payment").value = (
-            Number(this.state.principal) + Number(this.state.interestOwed)
+          document.getElementById("payment").value = Number(
+            this.state.totalBalance
           ).toFixed(2);
           // Automatically populate payment field if total balance is less than or equal to 100:
-          document.getElementById("payment").textContent = (
-            Number(this.state.principal) + Number(this.state.interestOwed)
+          document.getElementById("payment").textContent = Number(
+            this.state.totalBalance
           ).toFixed(2);
         } else {
           console.log(this.state.intPmt);
           console.log(this.state.principal);
+          // Set placeholder value when balance is over 100:
           pmtPlaceholderValue =
             "$" +
             (
@@ -317,10 +311,7 @@ class App extends React.Component {
             }) +
             " - " +
             "$" +
-            (
-              Number(Number(this.state.intPmt).toFixed(2)) +
-              Number(Number(this.state.principal).toFixed(2))
-            ).toLocaleString(undefined, {
+            Number(this.state.totalBalance).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             });
@@ -332,9 +323,8 @@ class App extends React.Component {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           });
-          document.getElementById("payment").max = (
-            Number(Number(this.state.intPmt).toFixed(2)) +
-            Number(Number(this.state.principal).toFixed(2))
+          document.getElementById("payment").max = Number(
+            this.state.totalBalance
           ).toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
@@ -387,7 +377,8 @@ class App extends React.Component {
                   id="interestRate"
                   name="interestRate"
                   type="number"
-                  step="0.01"
+                  step="0.001"
+                  min="0.001"
                   placeholder="Interest Rate"
                   required
                 />
@@ -397,8 +388,7 @@ class App extends React.Component {
               <label htmlFor="payment">
                 How much would you like to pay? <br />{" "}
                 <span class="sublabel">
-                  (MIN: 1% * principal + monthly interest; MAX: remaining
-                  principal + remaining interest)
+                  (MIN: 1% * principal + interest; MAX: principal + interest )
                 </span>
               </label>
               <input
