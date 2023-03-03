@@ -70,6 +70,7 @@ class App extends React.Component {
 
         // Calculate total minimum payment:
         let totalMinimumPayment = minPrincipalPayment + intPmt;
+        console.log(totalMinimumPayment);
 
         this.setState(
           {
@@ -194,8 +195,9 @@ class App extends React.Component {
 
     // Get new interest balance. (after current payment is made):
     console.log(this.state.interestRate / 100);
-    let newInterestOwed =
-      (newPrincipal * Number(this.state.interestRate)) / 100 / 12;
+    let newInterestOwed = Number(
+      ((newPrincipal * Number(this.state.interestRate)) / 100 / 12).toFixed(2)
+    );
     console.log(newInterestOwed);
 
     // Get new total balance (after current payment is made):
@@ -206,6 +208,24 @@ class App extends React.Component {
     if (principalPmt === prevPrincipal) {
       newPrincipal = 0;
     }
+
+    // Set new intPmt:
+    let newIntPmt = Number(
+      (newPrincipal * (Number(this.state.interestRate) / 100)) / 12
+    );
+    console.log(newIntPmt);
+
+    // Set new minimum payment:
+    let minPrincipalPayment = newPrincipal * 0.01;
+    console.log(minPrincipalPayment);
+    /* let totalMinimumPayment = Number(
+      (
+        newPrincipal * 0.01 +
+        (newPrincipal * (Number(this.state.interestRate) / 100)) / 12
+      ).toFixed(2)
+    ); */
+    let totalMinimumPayment = minPrincipalPayment + newIntPmt;
+    console.log(totalMinimumPayment);
 
     console.log(intPmt);
     console.log(principalPmt);
@@ -265,8 +285,10 @@ class App extends React.Component {
         prevInterestOwed: prevInterestOwed,
         prevPrincipal: prevPrincipal,
         interestOwed: newInterestOwed,
+        totalMinimumPayment: totalMinimumPayment,
       },
       () => {
+        console.log(totalMinimumPayment);
         // Set value of placeholder of payment field to either the total remaining balance if under 100 or a min-max range if over 100.
         let pmtPlaceholderValue;
         if (this.state.totalBalance <= 100) {
@@ -291,23 +313,33 @@ class App extends React.Component {
           // Set placeholder value when balance is over 100:
           pmtPlaceholderValue =
             "$" +
-            (
+            /* (
               Number(this.state.intPmt) +
               Number(this.state.principal) * 0.01
             ).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
+            }) + */
+            this.state.totalMinimumPayment.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
             }) +
             " - " +
             "$" +
-            Number(this.state.totalBalance).toLocaleString(undefined, {
+            this.state.totalBalance.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             });
           // Set value of min accepted value in payment field when total balance is over 100:
-          document.getElementById("payment").min = (
+          /* document.getElementById("payment").min = (
             Number(this.state.intPmt) +
             Number(this.state.principal) * 0.01
+          ).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }); */
+          document.getElementById("payment").min = Number(
+            this.state.totalMinimumPayment
           ).toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
