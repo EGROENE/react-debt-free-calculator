@@ -6,7 +6,7 @@ class PaymentHistory extends React.Component {
         const { paymentsArray } = this.props;
         return (
             <div id='paymentHistory'>
-                <header>Payment History</header>
+                <header id='pmtHistorySectionHeader' className='invisible'>Payment History</header>
                 {paymentsArray.map((pmt) => (
                     <div key={pmt.transactionNumber} className="paymentHistoryItem">
                         <div id='historyItemHeader'>
