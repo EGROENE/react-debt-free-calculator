@@ -32,6 +32,10 @@ code {
   font-family: 'Rajdhani', monospace;
 }
 
+.invisible {
+  display: none;
+}
+
 #page-header h1 {
   margin: 0;
 }
@@ -117,8 +121,53 @@ button:hover {
   transition: 200ms;
 }
 
+button:disabled:hover {
+  transition: 0ms;
+  cursor: not-allowed;
+}
+
 button[type = "submit"] {
   background-color: var(--react-blue);
   color: black;
   border: 2px solid black;
+}
+
+#paymentHistory  {
+  margin-top: var(--size-32);
+}
+
+#paymentHistory header {
+  font-size: var(--size-48);
+  margin-bottom: var(--size-24);
+}
+
+.paymentHistoryItem {
+  width: 97vw;
+  border: 2px solid gray;
+  margin-bottom: var(--size-16);
+}
+
+.paymentHistoryItem header {
+  font-size: var(--size-32);
+}
+
+.paymentHistoryItem header,
+.componentContainer span {
+  color: var(--react-blue);
+}
+
+.componentContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+#historyItemHeader {
+  display: flex;
+  justify-content: space-around;
+}
+
+#historyItemHeader p {
+  color: var(--react-blue);
+  margin: var(--size-8) 0px;
+  font-size: var(--size-32);
 }
