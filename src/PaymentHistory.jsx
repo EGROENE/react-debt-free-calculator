@@ -37,7 +37,7 @@ class PaymentHistory extends React.Component {
                                 maximumFractionDigits: 2})  }</p>
                             </div>
                         </div>
-                        {pmt.remainingPayments === 0 && <p key={pmt.transactionNumber + 'remainingPayments'}>You're debt-free!</p>
+                        {pmt.newBalance === 0 && <p key={pmt.transactionNumber + 'isDebtFree'}>You're debt-free!</p>
                         }
                     </div>
                 ))} 
