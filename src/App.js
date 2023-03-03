@@ -201,7 +201,7 @@ class App extends React.Component {
     console.log(newInterestOwed);
 
     // Get new total balance (after current payment is made):
-    let newBalance = Number((newPrincipal + newInterestOwed).toFixed(2));
+    let newBalance = Number(newPrincipal + newInterestOwed);
     console.log(newBalance);
 
     // If principal payment is equal to the principal balance...
@@ -358,7 +358,7 @@ class App extends React.Component {
         document.getElementById("payment").placeholder = pmtPlaceholderValue;
         console.log(Number(this.state.totalBalance));
         // Disable payment field after final payment is made:
-        if (Number(this.state.totalBalance) === 0) {
+        if (Number(Number(this.state.totalBalance).toFixed(2)) === 0) {
           document.getElementById("payment").setAttribute("disabled", "true");
           document.getElementById("resetBtn").setAttribute("disabled", "true");
           document.getElementById("submitBtn").setAttribute("disabled", "true");
