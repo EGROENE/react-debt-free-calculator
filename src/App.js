@@ -24,7 +24,6 @@ class App extends React.Component {
       transactionNumber: "",
       paymentsArray: [],
       paymentDate: "",
-      remainingPayments: "",
     };
   }
 
@@ -223,9 +222,6 @@ class App extends React.Component {
       transactionNumber += digits[Math.floor(Math.random() * 9)];
     }
 
-    // Calculate approximate remaining payments. Will only be used (for now) to let the user know when they are debt-free, that is, if this value is equal to 0.
-    let remainingPayments = Math.ceil((newBalance / currentPayment).toFixed(5));
-
     // Initialize array containing any and all values of the array corresponding to any infos from previous payments. Values from current payment will be pushed here, and its state will be set so that values from current payment will also be included in this array in any future payments. This array will be looped through to create items in payment history.
     const newArray = [...this.state.paymentsArray];
     // Push infos from current payment to new array:
@@ -242,7 +238,6 @@ class App extends React.Component {
       newBalance: newBalance,
       prevPrincipal: prevPrincipal,
       principal: newPrincipal,
-      remainingPayments: remainingPayments,
     });
 
     // Set state with values from current payment. The 'prev' parameter and corresponding rest operator is used in order to access previous state value of payments array & to set the state of that array to the new array, which is defined above.
@@ -258,7 +253,6 @@ class App extends React.Component {
       newBalance: newBalance,
       prevPrincipal: prevPrincipal,
       principal: newPrincipal,
-      remainingPayments: remainingPayments,
       ...prev,
       paymentsArray: newArray,
     }));
