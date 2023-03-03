@@ -201,7 +201,8 @@ class App extends React.Component {
     console.log(newInterestOwed);
 
     // Get new total balance (after current payment is made):
-    let newBalance = newPrincipal + newInterestOwed;
+    let newBalance = Number((newPrincipal + newInterestOwed).toFixed(2));
+    console.log(newBalance);
 
     // If principal payment is equal to the principal balance...
     // aka if user pays off entire principal:
@@ -288,7 +289,7 @@ class App extends React.Component {
         totalMinimumPayment: totalMinimumPayment,
       },
       () => {
-        console.log(totalMinimumPayment);
+        console.log(this.state.totalBalance);
         // Set value of placeholder of payment field to either the total remaining balance if under 100 or a min-max range if over 100.
         let pmtPlaceholderValue;
         if (this.state.totalBalance <= 100) {
