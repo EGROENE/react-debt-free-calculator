@@ -196,7 +196,7 @@ class App extends React.Component {
     // Get new interest balance. (after current payment is made):
     console.log(this.state.interestRate / 100);
     let newInterestOwed = Number(
-      ((newPrincipal * Number(this.state.interestRate)) / 100 / 12).toFixed(2)
+      (newPrincipal * Number(this.state.interestRate)) / 100 / 12
     );
     console.log(newInterestOwed);
 
