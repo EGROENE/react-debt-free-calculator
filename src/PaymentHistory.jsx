@@ -37,7 +37,8 @@ class PaymentHistory extends React.Component {
                                 maximumFractionDigits: 2})  }</p>
                             </div>
                         </div>
-                        {pmt.newBalance === 0 && <p key={pmt.transactionNumber + 'isDebtFree'}>You're debt-free!</p>
+                        {Number((pmt.newBalance).toLocaleString(undefined,{minimumFractionDigits: 2,
+                                maximumFractionDigits: 2})) === 0 && <p key={pmt.transactionNumber + 'isDebtFree'}>You're debt-free!</p>
                         }
                     </div>
                 ))} 
