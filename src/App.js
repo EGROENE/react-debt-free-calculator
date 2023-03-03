@@ -2,7 +2,6 @@ import React from "react";
 import "./App.css";
 import PaymentHistory from "./PaymentHistory";
 
-//let pmtCounter = 0;
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -156,6 +155,10 @@ class App extends React.Component {
     event.preventDefault();
     // Update values upon payment:
     this.updatePaymentInfo();
+    // Make 'Payment History' header visible:
+    document
+      .getElementById("pmtHistorySectionHeader")
+      .classList.remove("invisible");
     // Reset the form:
     document.getElementById("paymentForm").reset();
     // Disable the principal & interest rate input fields upon payment:
@@ -345,13 +348,13 @@ class App extends React.Component {
             <img
               src="./logo192.png"
               alt="react-logo-header"
-              class="App-logo"
+              className="App-logo"
             ></img>
             <h1>React Debt-Free Calculator</h1>
           </div>
           <form id="paymentForm" onSubmit={this.handleSubmission}>
-            <div class="form-row">
-              <div class="form-item">
+            <div className="form-row">
+              <div className="form-item">
                 <label htmlFor="principal">
                   How much is your debt principal?
                 </label>
@@ -366,7 +369,7 @@ class App extends React.Component {
                   required
                 />
               </div>
-              <div class="form-item">
+              <div className="form-item">
                 <label htmlFor="interestRate">
                   How much is the interest rate?
                 </label>
@@ -381,10 +384,10 @@ class App extends React.Component {
                 />
               </div>
             </div>
-            <div class="form-item">
+            <div className="form-item">
               <label htmlFor="payment">
                 How much would you like to pay? <br />{" "}
-                <span class="sublabel">
+                <span className="sublabel">
                   {this.state.interestRate &&
                     "Interest Rate: " + this.state.interestRate + "%"}
                 </span>
