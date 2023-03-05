@@ -196,7 +196,7 @@ button[type = "submit"] {
 #makeAnotherPayment {
   background-color: var(--react-blue);
   color: black;
-  border: 2px solid black;
+  border: 2px solid var(--react-blue);
 }
 
 #makeAnotherPayment:hover {
