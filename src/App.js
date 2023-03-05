@@ -91,11 +91,11 @@ class App extends React.Component {
                 maximumFractionDigits: 2,
               });
               // Set value of min accepted value in payment field when total balance is less than or equal to 100:
-              document.getElementById("payment").min = (
+              document.getElementById("payment").min = Number(
                 Number(this.state.principal) + Number(this.state.interestOwed)
               ).toFixed(2);
               // Set value of max accepted value in payment field when total balance is less than or equal to 100:
-              document.getElementById("payment").max = (
+              document.getElementById("payment").max = Number(
                 Number(this.state.principal) + Number(this.state.interestOwed)
               ).toFixed(2);
               // Set value of payment field to remaining balance (user cannot change it):
@@ -123,20 +123,13 @@ class App extends React.Component {
                   maximumFractionDigits: 2,
                 });
               // Set value of min accepted value in payment field when total balance is over 100:
-              document.getElementById("payment").min = (
-                Number(this.state.intPmt) +
-                Number(this.state.principal) * 0.01
-              ).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              });
-              document.getElementById("payment").max = (
+              document.getElementById("payment").min = Number(
+                Number(this.state.intPmt) + Number(this.state.principal) * 0.01
+              ).toFixed(2);
+              document.getElementById("payment").max = Number(
                 Number(Number(this.state.intPmt).toFixed(2)) +
-                Number(Number(this.state.principal).toFixed(2))
-              ).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              });
+                  Number(Number(this.state.principal).toFixed(2))
+              ).toFixed(2);
             }
             // Apply whichever placeholder value applies to the situation, to the placeholder of the payment field:
             console.log(Number(this.state.intPmt));
@@ -306,7 +299,7 @@ class App extends React.Component {
             }
           );
           // Set value of min accepted value in payment field when total balance is less than or equal to 100:
-          document.getElementById("payment").max = Number(
+          document.getElementById("payment").min = Number(
             this.state.totalBalance
           ).toFixed(2);
           // Set value of max accepted value in payment field when total balance is less than or equal to 100:
@@ -346,16 +339,10 @@ class App extends React.Component {
           }); */
           document.getElementById("payment").min = Number(
             this.state.totalMinimumPayment
-          ).toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          });
+          ).toFixed(2);
           document.getElementById("payment").max = Number(
             this.state.totalBalance
-          ).toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          });
+          ).toFixed(2);
         }
         // Apply whichever placeholder value applies to the situation, to the placeholder of the payment field:
         console.log(Number(this.state.intPmt));
