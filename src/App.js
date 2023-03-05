@@ -27,6 +27,12 @@ class App extends React.Component {
     };
   }
 
+  // Method to scroll to top of page:
+  // Done when a part of PaymentHistory component is clicked:
+  scrollToTop = () => {
+    window.scrollTo({ top: 0 });
+  };
+
   // Since document DOM is not used in React, this is how to get the value of an input (whichever input handleChange() is applied to)
   // 'name' corresponds to the name of the input field in question. 'value' is set to whatever in input. Both are destructured immediately from 'target'. States of principal, interestRate (this method is called only on the initial payment, when the previous two fields are changed, as they are disabled after first payment is submitted), and payment are set, as this method is called when these fields change.
   handleChange = ({ target: { name, value } }) => {
@@ -477,7 +483,7 @@ class App extends React.Component {
               </button>
             </div>
           </form>
-          <PaymentHistory {...this.state} />
+          <PaymentHistory {...this.state} scrollToTop={this.scrollToTop} />
         </header>
       </div>
     );

@@ -3,7 +3,7 @@ import React from 'react';
 class PaymentHistory extends React.Component {
     render() {
         // 'Import' paymentsArray from App.js, which is passed on thru props, and deconstruct immediately:
-        const { paymentsArray } = this.props;
+        const { paymentsArray, scrollToTop } = this.props;
         return (
             <div id='paymentHistory'>
                 <header id='pmtHistorySectionHeader' className='invisible'>Payment History</header>
@@ -42,7 +42,9 @@ class PaymentHistory extends React.Component {
                             </div>
                         </div>
                         {Number((pmt.newBalance).toLocaleString(undefined,{minimumFractionDigits: 2,
-                                maximumFractionDigits: 2})) === 0 && <p key={pmt.transactionNumber + 'isDebtFree'}>You're debt-free!</p>
+                                maximumFractionDigits: 2})) === 0 
+                                ? <p key={pmt.transactionNumber + 'isDebtFree'}>You're debt-free!</p> 
+                                : <button id='makeAnotherPayment' onClick={scrollToTop}>Make another payment</button>
                         }
                     </div>
                 ))} 
