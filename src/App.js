@@ -63,10 +63,8 @@ class App extends React.Component {
         );
 
         intPmt = Number(
-          (
-            Number(this.state.principal) *
+          Number(this.state.principal) *
             ((Number(this.state.interestRate) * 0.01) / 12)
-          ).toFixed(2)
         );
         console.log(intPmt);
 
