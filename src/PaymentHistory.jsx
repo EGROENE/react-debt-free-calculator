@@ -37,7 +37,7 @@ class PaymentHistory extends React.Component {
                                 maximumFractionDigits: 2})  }</p>
                                 <p key={pmt.transactionNumber + 'newBalance'}><span>Current Balance:</span> ${ pmt.newBalance.toLocaleString(undefined,{minimumFractionDigits: 2,
                                 maximumFractionDigits: 2})  }
-                                     <i class="fas fa-info-circle" title= "Current Principal + Interest Owed on Next Payment"></i>
+                                     <i className="fas fa-info-circle" title= "Current Principal + Interest Owed on Next Payment"></i>
                                 </p>
                             </div>
                         </div>
