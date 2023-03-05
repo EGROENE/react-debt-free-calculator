@@ -164,6 +164,11 @@ class App extends React.Component {
     // Disable the principal & interest rate input fields upon payment:
     document.getElementById("debtPrincipal").setAttribute("disabled", "true");
     document.getElementById("interestRate").setAttribute("disabled", "true");
+    // Scroll to bottom of page (to most-recent payment history item):
+    function scrollToBottom() {
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+    setTimeout(scrollToBottom, 750);
   };
 
   updatePaymentInfo = () => {
