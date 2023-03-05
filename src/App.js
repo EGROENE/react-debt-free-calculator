@@ -377,7 +377,13 @@ class App extends React.Component {
               alt="react-logo-header"
               className="App-logo"
             ></img>
-            <h1>React Debt-Free Calculator</h1>
+            <h1>
+              React Debt-Free Calculator
+              <i
+                class="fas fa-info-circle"
+                title="Interest is recalculated after each payment, based on the new Principal. &#10;The minimum amount you are required to pay in a given payment is calculated as follows: ((Principal * Interest Rate) / 12) + Principal * 1%. &#10;The maximum amount you can pay in a given payment is calculated as follows: ((Principal * Interest Rate) / 12) + Principal. If you pay this amount, the debt will be paid off in full."
+              ></i>
+            </h1>
           </div>
           <form id="paymentForm" onSubmit={this.handleSubmission}>
             <div className="form-row">

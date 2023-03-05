@@ -32,6 +32,16 @@ code {
   font-family: 'Rajdhani', monospace;
 }
 
+i {
+  color: var(--react-blue);
+  font-size: var(--size-24);
+  margin: var(--size-12);
+}
+
+i:hover {
+  cursor:pointer
+}
+
 .invisible {
   display: none;
 }
