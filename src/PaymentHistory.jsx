@@ -26,7 +26,9 @@ class PaymentHistory extends React.Component {
                                 maximumFractionDigits: 2}) }</p>
                                 <p key={pmt.transactionNumber + 'interestPayment'}><span>Interest Paid:</span> ${ pmt.intPmt.toLocaleString(undefined,{minimumFractionDigits: 2,
                                 maximumFractionDigits: 2})  }</p>
-                                <p key={pmt.transactionNumber + 'interestOwed'}><span>Interest Owed on Next Payment:</span> ${pmt.interestOwed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                                <p key={pmt.transactionNumber + 'interestOwed'}><span>Interest Owed on Next Payment:</span> ${pmt.interestOwed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} 
+                                    <i class="fas fa-info-circle"title= "Current Principal * Interest Rate / 12"></i>
+                                </p>
                             </div>
                             <div className='historyItemComponent'>
                                 <p key={pmt.transactionNumber + 'prevBalance'}><span>Previous Balance:</span> ${ pmt.prevBalance.toLocaleString(undefined,{minimumFractionDigits: 2,
@@ -34,7 +36,9 @@ class PaymentHistory extends React.Component {
                                 <p key={pmt.transactionNumber + 'currentPayment'}><span>Total Current Payment:</span> ${ pmt.payment.toLocaleString(undefined,{minimumFractionDigits: 2,
                                 maximumFractionDigits: 2})  }</p>
                                 <p key={pmt.transactionNumber + 'newBalance'}><span>Current Balance:</span> ${ pmt.newBalance.toLocaleString(undefined,{minimumFractionDigits: 2,
-                                maximumFractionDigits: 2})  }</p>
+                                maximumFractionDigits: 2})  }
+                                     <i class="fas fa-info-circle" title= "Current Principal + Interest Owed on Next Payment"></i>
+                                </p>
                             </div>
                         </div>
                         {Number((pmt.newBalance).toLocaleString(undefined,{minimumFractionDigits: 2,

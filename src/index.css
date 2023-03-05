@@ -181,3 +181,9 @@ button[type = "submit"] {
   margin: var(--size-8) 0px;
   font-size: var(--size-32);
 }
+
+.historyItemComponent i {
+  font-size: var(--size-16);
+  margin: 0;
+  margin-left: var(--size-8);
+}
