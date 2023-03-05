@@ -156,7 +156,7 @@ button[type = "submit"] {
 }
 
 .paymentHistoryItem {
-  width: 97vw;
+  width: 91vw;
   border: 2px solid gray;
   margin-bottom: var(--size-16);
   padding: var(--size-12);
