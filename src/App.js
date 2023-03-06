@@ -1,5 +1,7 @@
 import React from "react";
 import "./App.css";
+import "./index.css";
+import "./responsive.css";
 import PaymentHistory from "./PaymentHistory";
 
 class App extends React.Component {
