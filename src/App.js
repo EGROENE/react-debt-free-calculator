@@ -35,6 +35,22 @@ class App extends React.Component {
     window.scrollTo({ top: 0 });
   };
 
+  // Method to reset payment field:
+  resetPaymentField = () => {
+    this.setState(
+      {
+        principal: "",
+        intPmt: "",
+        interestRate: "",
+      },
+      () => {
+        document.getElementById("payment").min = "0.00";
+        document.getElementById("payment").max = "0.00";
+        document.getElementById("payment").placeholder = "$0.00-$0.00";
+      }
+    );
+  };
+
   // Since document DOM is not used in React, this is how to get the value of an input (whichever input handleChange() is applied to)
   // 'name' corresponds to the name of the input field in question. 'value' is set to whatever in input. Both are destructured immediately from 'target'. States of principal, interestRate (this method is called only on the initial payment, when the previous two fields are changed, as they are disabled after first payment is submitted), and payment are set, as this method is called when these fields change.
   handleChange = ({ target: { name, value } }) => {
@@ -98,12 +114,16 @@ class App extends React.Component {
               });
               // Set value of min accepted value in payment field when total balance is less than or equal to 100:
               document.getElementById("payment").min = Number(
-                Number(this.state.principal) + Number(this.state.interestOwed)
-              ).toFixed(2);
+                (
+                  Number(this.state.principal) + Number(this.state.interestOwed)
+                ).toFixed(2)
+              );
               // Set value of max accepted value in payment field when total balance is less than or equal to 100:
               document.getElementById("payment").max = Number(
-                Number(this.state.principal) + Number(this.state.interestOwed)
-              ).toFixed(2);
+                (
+                  Number(this.state.principal) + Number(this.state.interestOwed)
+                ).toFixed(2)
+              );
               // Set value of payment field to remaining balance (user cannot change it):
               /* document.getElementById("payment").value = (
                 Number(this.state.principal) + Number(this.state.interestOwed)
@@ -476,7 +496,11 @@ class App extends React.Component {
               />
             </div>
             <div id="buttons-container">
-              <button type="reset" id="resetBtn" onClick={this.resetForm}>
+              <button
+                type="reset"
+                id="resetBtn"
+                onClick={this.resetPaymentField}
+              >
                 Reset All Fields
               </button>
               <button type="submit" id="submitBtn">
