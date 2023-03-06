@@ -405,6 +405,7 @@ class App extends React.Component {
                 <input
                   onChange={this.handleChange}
                   id="interestRate"
+                  min="0"
                   name="interestRate"
                   type="number"
                   step="0.001"
