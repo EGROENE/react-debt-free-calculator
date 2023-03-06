@@ -27,7 +27,7 @@ class PaymentHistory extends React.Component {
                                 <p key={pmt.transactionNumber + 'interestPayment'}><span>Interest Paid:</span> ${ pmt.intPmt.toLocaleString(undefined,{minimumFractionDigits: 2,
                                 maximumFractionDigits: 2})  }</p>
                                 <p key={pmt.transactionNumber + 'interestOwed'}><span>Interest Owed on Next Payment:</span> ${pmt.interestOwed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} 
-                                    <i class="fas fa-info-circle"title= "Current Principal * Interest Rate / 12 &#10;Small differences may occur due to rounding."></i>
+                                    <i className="fas fa-info-circle"title= "Current Principal * Interest Rate / 12 &#10;Small differences may occur due to rounding."></i>
                                 </p>
                             </div>
                             <div className='historyItemComponent'>
