@@ -98,8 +98,10 @@ input {
   font-weight: 700;
 }
 
-input:focus {
+input:focus,
+button:focus {
   box-shadow: 0px 0px 10px 2px var(--react-blue);
+  outline: none;
 }
 
 input:disabled {
@@ -143,7 +145,7 @@ button:disabled:hover {
 button[type = "submit"] {
   background-color: var(--react-blue);
   color: black;
-  border: 2px solid black;
+  border: 2px solid var(--react-blue);
 }
 
 #paymentHistory  {
