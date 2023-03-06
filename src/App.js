@@ -61,6 +61,7 @@ class App extends React.Component {
       () => {
         // The below code executes with setState above:
         console.log(this.state.principal);
+        console.log(this.state.interestRate);
 
         // Calculate minimum payment on principal:
         let minPrincipalPayment = Number(this.state.principal) * 0.01;
@@ -74,12 +75,6 @@ class App extends React.Component {
         /* let intPmt =
           Number(Number(this.state.principal) * Number(this.state.interestRate) / 100 / (12 - pmtCounter)); */
 
-        let totalBalance = Number(
-          (
-            Number(this.state.principal) + Number(this.state.interestOwed)
-          ).toFixed(2)
-        );
-
         intPmt = Number(
           Number(this.state.principal) *
             ((Number(this.state.interestRate) * 0.01) / 12)
@@ -90,9 +85,30 @@ class App extends React.Component {
         let interestOwed = intPmt;
         console.log(interestOwed);
 
+        let totalBalance = Number(
+          (Number(this.state.principal) + intPmt).toFixed(2)
+        );
+        console.log(this.state.principal);
+        console.log(this.state.interestOwed);
+        console.log(totalBalance);
+
         // Calculate total minimum payment:
         let totalMinimumPayment = minPrincipalPayment + intPmt;
         console.log(totalMinimumPayment);
+
+        document.getElementById("payment").min = totalMinimumPayment.toFixed(2);
+        document.getElementById("payment").max = totalBalance;
+        document.getElementById("payment").placeholder =
+          "$" +
+          totalMinimumPayment.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }) +
+          " - $" +
+          totalBalance.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
 
         this.setState(
           {
@@ -103,6 +119,7 @@ class App extends React.Component {
             interestOwed: interestOwed,
           },
           () => {
+            console.log(this.state.totalBalance);
             // Set value of placeholder of payment field to either the total remaining balance if under 100 or a min-max range if over 100.
             let pmtPlaceholderValue;
             if (this.state.totalBalance <= 100) {
