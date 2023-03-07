@@ -1,0 +1,101 @@
+:root {
+    --size-4: 0.25rem;
+    --size-8: 0.5rem;
+    --size-12: 0.75rem;
+    --size-16: 1rem;
+    --size-20: 1.25rem;
+    --size-24: 1.5rem;
+    --size-28: 1.75rem;
+    --size-32: 2rem;
+    --size-36: 2.25rem;
+    --size-40: 2.5rem;
+    --size-42: 2.75rem;
+    --size-48: 3rem;
+    --size-56: 3.5rem;
+    --size-64: 4rem;
+    --react-blue: #61dafb;
+}
+
+@media screen and (min-height: 2048px) {
+    .App-header {
+        justify-content: center;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    #paymentForm div {
+        margin: var(--size-24) auto;
+    }
+
+    label {
+        font-size: var(--size-42);
+    }
+
+    .sublabel {
+        font-size: var(--size-32);
+    }
+
+    input {
+        margin-top: var(--size-32);
+        font-size: var(--size-32);
+    }
+
+    #payment {
+        width: 32%;
+    }
+}
+
+@media screen and (max-width: 962px) {
+    label {
+        font-size: var(--size-28);
+    }
+}
+
+@media screen and (max-width: 810px) {
+    .App-header {
+        justify-content: center;
+    }
+
+    #payment {
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 601px) {
+    #page-header {
+        width: 80%;
+    }
+
+    .form-row {
+        display: block;
+    }
+
+    #payment {
+        width: 80%;
+    }
+
+    #buttons-container {
+        width: 100%;
+    }
+
+    .paymentHistoryItem {
+        width: 76vw;
+    }
+
+    .componentContainer,
+    #historyItemHeader {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 414px) {
+    #page-header {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    button {
+        font-size: var(--size-16);
+    }
+}
