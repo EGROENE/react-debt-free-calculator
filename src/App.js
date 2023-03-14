@@ -9,25 +9,31 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      prevPrincipal: "",
-      principal: "",
-      minPrincipalPayment: "",
-      principalPmt: "",
-      interestRate: "",
-      prevInterestOwed: "",
-      interestOwed: "",
-      prevIntPmt: "",
-      intPmt: "",
-      totalMinimumPayment: "",
-      payment: "",
-      prevBalance: "",
-      totalBalance: "",
-      newBalance: "",
+      prevPrincipal: 0,
+      principal: 0,
+      minPrincipalPayment: 0,
+      principalPmt: 0,
+      interestRate: 0,
+      prevInterestOwed: 0,
+      interestOwed: 0,
+      prevIntPmt: 0,
+      intPmt: 0,
+      totalMinimumPayment: 0,
+      totalMaximumPayment: 0,
+      pmtPlaceholder: "",
+      payment: 0,
+      prevBalance: 0,
+      totalBalance: 0,
+      newBalance: 0,
       transactionNumber: "",
       paymentsArray: [],
       paymentDate: "",
+      isAbleToPay: false,
     };
   }
+
+  // Method to round numbers to nearest cent:
+  cleanValue = (val) => parseFloat(val.toFixed(2));
 
   // Method to scroll to top of page:
   scrollToTop = () => {
@@ -35,128 +41,49 @@ class App extends React.Component {
   };
 
   // Method to reset payment field, Principal, Interest Payment, Interest Rate state values:
+  // Should reset principal, intPmt, interestRate, min/max pmts, placeholder only if no payments have been made. Otherwise, it should reset the value of the pmt field alone to blank.
   resetPaymentField = () => {
-    this.setState(
-      {
-        principal: "",
-        intPmt: "",
-        interestRate: "",
-      },
-      () => {
-        document.getElementById("payment").min = "0.00";
-        document.getElementById("payment").max = "0.00";
-        document.getElementById("payment").placeholder = "$0.00-$0.00";
-      }
-    );
+    this.setState({
+      principal: 0,
+      intPmt: 0,
+      interestRate: 0,
+      totalMinimumPayment: 0,
+      totalMaximumPayment: 0,
+      pmtPlaceholder: "",
+    });
   };
 
-  // Since document DOM is not used in React, this is how to get the value of an input (whichever input handleChange() is applied to)
-  // 'name' corresponds to the name of the input field in question. 'value' is set to whatever in input. Both are destructured immediately from 'target'. States of principal, interestRate (this method is called only on the initial payment, when the previous two fields are changed, as they are disabled after first payment is submitted), and payment are set, as this method is called when these fields change.
-  handleChange = ({ target: { name, value } }) => {
-    this.setState(
-      {
-        [`${name}`]: value,
-      },
-      () => {
-        // Calculate minimum payment on principal:
-        let minPrincipalPayment = Number(this.state.principal) * 0.01;
+  /* handleChange = ({ target: { name, value } }) => {
+    this.setState({
+      [`${name}`]: value,
+    });
+  }; */
 
-        // Calculate interest payment:
-        let intPmt = Number(
-          Number(this.state.principal) *
-            ((Number(this.state.interestRate) * 0.01) / 12)
-        );
-
-        // Initialize interestOwed. This will be passed to state value of the same name below.
-        let interestOwed = intPmt;
-
-        let totalBalance = Number(
-          (Number(this.state.principal) + intPmt).toFixed(2)
-        );
-
-        // Calculate total minimum payment:
-        let totalMinimumPayment = minPrincipalPayment + intPmt;
-
-        document.getElementById("payment").min = totalMinimumPayment.toFixed(2);
-        document.getElementById("payment").max = totalBalance;
-        document.getElementById("payment").placeholder =
-          "$" +
-          totalMinimumPayment.toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          }) +
-          " - $" +
-          totalBalance.toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          });
-
-        this.setState(
-          {
-            minPrincipalPayment: minPrincipalPayment,
-            intPmt: intPmt,
-            totalMinimumPayment: totalMinimumPayment,
-            totalBalance: totalBalance,
-            interestOwed: interestOwed,
-          },
-          () => {
-            // Set value of placeholder of payment field to either the total remaining balance if less than or equal to 100 or a min-max range if over 100.
-            let pmtPlaceholderValue;
-            if (this.state.totalBalance <= 100) {
-              pmtPlaceholderValue = Number(
-                this.state.totalBalance
-              ).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              });
-              // Set value of min accepted value in payment field when total balance is less than or equal to 100:
-              document.getElementById("payment").min = Number(
-                (
-                  Number(this.state.principal) + Number(this.state.interestOwed)
-                ).toFixed(2)
-              );
-              // Set value of max accepted value in payment field when total balance is less than or equal to 100:
-              document.getElementById("payment").max = Number(
-                (
-                  Number(this.state.principal) + Number(this.state.interestOwed)
-                ).toFixed(2)
-              );
-            } else {
-              pmtPlaceholderValue =
-                "$" +
-                (
-                  Number(this.state.intPmt) +
-                  Number(this.state.principal) * 0.01
-                ).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }) +
-                " - " +
-                "$" +
-                (
-                  Number(Number(this.state.intPmt).toFixed(2)) +
-                  Number(Number(this.state.principal).toFixed(2))
-                ).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                });
-              // Set value of min accepted value in payment field when total balance is over 100:
-              document.getElementById("payment").min = Number(
-                Number(this.state.intPmt) + Number(this.state.principal) * 0.01
-              ).toFixed(2);
-              // Set value of max accepted value in payment field when total balance is over 100:
-              document.getElementById("payment").max = Number(
-                Number(Number(this.state.intPmt).toFixed(2)) +
-                  Number(Number(this.state.principal).toFixed(2))
-              ).toFixed(2);
-            }
-            // Apply whichever placeholder value applies to the situation, to the placeholder of the payment field:
-            document.getElementById("payment").placeholder =
-              pmtPlaceholderValue;
-          }
-        );
-      }
-    );
+  handleChange = (e) => {
+    // Destructure the name of the input field, as well as its value:
+    const { name, value } = e.target;
+    // Auto set principal, interest rate state values. Is it OK to have two setStates in one method? Could both here be done in one setState? BTW, I will die defending the auto setting of payment field's placeholder, min, max upon change, as it's much more user-friendly.
+    this.setState({
+      [`${name}`]: value,
+    });
+    // What is dataToUpdate? What's it for & what is happening here? Why +value?
+    const dataToUpdate = {
+      [`${name}`]: +value,
+    };
+    console.log(dataToUpdate);
+    if (
+      name === "payment" &&
+      +value >= this.state.totalMinimumPayment &&
+      +value <= this.state.totalMaximumPayment
+    ) {
+      dataToUpdate.isAbleToPay = true;
+    } else {
+      dataToUpdate.isAbleToPay = false;
+    }
+    this.setState((prev) => ({
+      ...prev,
+      ...dataToUpdate,
+    }));
   };
 
   handleSubmission = (event) => {
@@ -396,48 +323,39 @@ class App extends React.Component {
                 id="payment"
                 type="number"
                 step="0.01"
-                min={
-                  this.state.totalBalance > 100
-                    ? Number(this.state.totalMinimumPayment).toFixed(2)
-                    : Number(this.state.totalBalance).toFixed(2)
-                }
-                max={
-                  this.state.totalBalance > 100
-                    ? "$" +
-                      (
-                        this.state.principal *
-                        (this.state.interestRate / 100 + 1)
-                      ).toFixed(2)
-                    : Number(this.state.totalBalance).toFixed(2)
-                }
+                min={(
+                  this.state.principal / 100 +
+                  (this.state.principal * this.state.interestRate) / 100 / 12
+                ).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+                max={(
+                  this.state.principal +
+                  (this.state.principal * this.state.interestRate) / 100 / 12
+                ).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
                 onChange={this.handleChange}
                 placeholder={
-                  this.state.totalBalance <= 100 && this.state.totalBalance > 0
-                    ? (
-                        Number(this.state.principal) *
-                        (Number(this.state.interestRate) / 100 + 1)
-                      ).toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })
-                    : "$" +
-                      (
-                        Number(this.state.principal) * 0.01 +
-                        Number(this.state.principal) *
-                          ((Number(this.state.interestRate) * 0.01) / 12)
-                      ).toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }) +
-                      " - " +
-                      "$" +
-                      (
-                        this.state.principal *
-                        (this.state.interestRate / 100 + 1)
-                      ).toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })
+                  "$" +
+                  (
+                    this.state.principal / 100 +
+                    (this.state.principal * this.state.interestRate) / 100 / 12
+                  ).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }) +
+                  " - " +
+                  "$" +
+                  (
+                    this.state.principal +
+                    (this.state.principal * this.state.interestRate) / 100 / 12
+                  ).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
                 }
                 required
               />
@@ -455,7 +373,10 @@ class App extends React.Component {
               </button>
             </div>
           </form>
-          <PaymentHistory {...this.state} scrollToTop={this.scrollToTop} />
+          <PaymentHistory
+            paymentsArray={this.state.paymentsArray}
+            scrollToTop={this.scrollToTop}
+          />
         </header>
       </div>
     );
