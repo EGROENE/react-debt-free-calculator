@@ -13,7 +13,7 @@ class App extends React.Component {
       principal: 0,
       minPrincipalPayment: 0,
       principalPmt: 0,
-      interestRate: 0,
+      interestRate: "",
       prevInterestOwed: 0,
       interestOwed: 0,
       prevIntPmt: 0,
@@ -29,6 +29,8 @@ class App extends React.Component {
       paymentsArray: [],
       paymentDate: "",
       isAbleToPay: false,
+      atLeastOnePmtMade: false,
+      historyHeaderDisplay: "none",
     };
   }
 
@@ -46,7 +48,7 @@ class App extends React.Component {
     this.setState({
       principal: 0,
       intPmt: 0,
-      interestRate: 0,
+      interestRate: "",
       totalMinimumPayment: 0,
       totalMaximumPayment: 0,
       pmtPlaceholder: "",
@@ -59,14 +61,22 @@ class App extends React.Component {
     });
   }; */
 
+  // Instead of Andrey's method of disabling pmt button until value of payment field meets requirements, I want to automatically update the min, max, & placeholder of payment field as user enters info. The user being able to see the min/max in placeholder is much more user-friendly. I see no other way to do it than with a callback in setState.
   handleChange = (e) => {
     // Destructure the name of the input field, as well as its value:
     const { name, value } = e.target;
     // Auto set principal, interest rate state values. Is it OK to have two setStates in one method? Could both here be done in one setState? BTW, I will die defending the auto setting of payment field's placeholder, min, max upon change, as it's much more user-friendly.
-    this.setState({
-      [`${name}`]: value,
-    });
-    // What is dataToUpdate? What's it for & what is happening here? Why +value?
+    this.setState(
+      {
+        [`${name}`]: value,
+      },
+      () => {
+        console.log(this.state.principal);
+        console.log(this.state.interestRate);
+        console.log(this.state.payment);
+      }
+    );
+    // What is dataToUpdate? What's it for & what is happening here? Why +value? Maybe to convert to a number...
     const dataToUpdate = {
       [`${name}`]: +value,
     };
@@ -86,53 +96,86 @@ class App extends React.Component {
     }));
   };
 
-  handleSubmission = (event) => {
-    // Prevent default handling of form submission, including reload of page:
-    event.preventDefault();
-    // Update values upon payment:
-    this.updatePaymentInfo();
-    // Make 'Payment History' header visible:
-    document
-      .getElementById("pmtHistorySectionHeader")
-      .classList.remove("invisible");
-    // Reset the form:
-    document.getElementById("paymentForm").reset();
-    // Disable the principal & interest rate input fields upon first payment:
-    document.getElementById("debtPrincipal").setAttribute("disabled", "true");
-    document.getElementById("interestRate").setAttribute("disabled", "true");
-    // Scroll to bottom of page (to most-recent payment history item):
-    function scrollToBottom() {
-      window.scrollTo(0, document.body.scrollHeight);
-    }
-    setTimeout(scrollToBottom, 750);
-  };
-
   updatePaymentInfo = () => {
     // Current total balance (a.k.a. the total balance before current payment is made) will be passed to value of state prevBalance below.
-    let prevBalance = Number(this.state.totalBalance);
+    //let prevBalance = Number(this.state.totalBalance);
+    console.log(this.state.principal);
+    console.log(this.state.interestRate);
+    console.log(Number(this.state.interestRate) / 100 + 1);
+    let prevBalance =
+      this.state.principal +
+      (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
+    console.log(prevBalance);
 
     // Current interest payment (a.k.a. the interest payment before current payment is made):
-    let intPmt = Number(Number(this.state.interestOwed).toFixed(2));
+    // Consolidate these in payments array. IOW, prev interest owed equals the int paid.
+    //let intPmt = Number(Number(this.state.interestOwed).toFixed(2));
+    let intPmt = Number(
+      (
+        (this.state.principal * Number(this.state.interestRate)) /
+        100 /
+        12
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+    );
+    console.log(intPmt);
 
     // Current total payment:
-    let currentPayment = Number(Number(this.state.payment).toFixed(2));
+    let currentPayment = Number(
+      this.state.payment.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+    );
+    console.log(currentPayment);
 
     // Principal before current payment is made:
-    let prevPrincipal = Number(Number(this.state.principal).toFixed(2));
+    /* let prevPrincipal = Number(
+      this.state.principal.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+    ); */
+    let prevPrincipal = Number(this.state.principal.toFixed(2));
+    console.log(prevPrincipal);
+
+    /* let prevBalance = prevPrincipal - currentPayment;
+    console.log(prevBalance); */
 
     // Amount of current payment that is paid against the Principal:
     let principalPmt = currentPayment - intPmt;
+    console.log(principalPmt);
 
     // Calculate Principal after current payment is made:
     let newPrincipal = prevPrincipal - principalPmt;
+    console.log(newPrincipal);
 
     // Calculate interest owed before current payment is made:
-    let prevInterestOwed = Number(Number(this.state.interestOwed).toFixed(2));
+    let prevInterestOwed = Number(
+      Number(this.state.interestOwed).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+    );
+    console.log(prevInterestOwed);
 
     // Get new interest balance. (after current payment is made):
+    /* let newInterestOwed = parseFloat(
+      ((newPrincipal * Number(this.state.interestRate)) / 100 / 12).toFixed(2)
+    ); */
     let newInterestOwed = Number(
-      (newPrincipal * Number(this.state.interestRate)) / 100 / 12
+      (
+        (newPrincipal * Number(this.state.interestRate)) /
+        100 /
+        12
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
     );
+    console.log(newInterestOwed);
 
     // Get new total balance (after current payment is made):
     let newBalance = Number(newPrincipal + newInterestOwed);
@@ -153,6 +196,25 @@ class App extends React.Component {
     let minPrincipalPayment = newPrincipal * 0.01;
     let totalMinimumPayment = minPrincipalPayment + newIntPmt;
 
+    console.log(
+      parseFloat(
+        (
+          this.state.principal / 100 +
+          (this.state.principal * this.state.interestRate) / 100 / 12
+        ).toFixed(2)
+      )
+    );
+
+    console.log(
+      (
+        this.state.principal / 100 +
+        (this.state.principal * this.state.interestRate) / 100 / 12
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+    );
+
     // Get the date and time of when user submits payment:
     let paymentDate = new Date();
 
@@ -170,7 +232,6 @@ class App extends React.Component {
       transactionNumber: transactionNumber,
       paymentDate: paymentDate,
       prevBalance: prevBalance,
-      prevInterestOwed: prevInterestOwed,
       interestOwed: newInterestOwed,
       principalPmt: principalPmt,
       intPmt: intPmt,
@@ -185,7 +246,6 @@ class App extends React.Component {
       transactionNumber: transactionNumber,
       paymentDate: paymentDate,
       prevBalance: prevBalance,
-      prevInterestOwed: prevInterestOwed,
       interestOwed: newInterestOwed,
       principalPmt: principalPmt,
       intPmt: intPmt,
@@ -197,66 +257,44 @@ class App extends React.Component {
     }));
 
     // Set state of new current principal balance, total balance, previous interest owed, previous principal, interestOwed, & totalMinimumPayment to be displayed in the history items pertaining to any future payments. These will also be used when calculating min amount of future payments:
+    this.setState({
+      principal: newPrincipal,
+      totalBalance: newBalance,
+      prevInterestOwed: prevInterestOwed,
+      prevPrincipal: prevPrincipal,
+      interestOwed: newInterestOwed,
+      totalMinimumPayment: totalMinimumPayment,
+    });
+  };
+
+  handleSubmission = (event) => {
+    // Prevent default handling of form submission, including reload of page:
+    event.preventDefault();
+    // Update values upon payment:
+    this.updatePaymentInfo();
+    // Make atLeastOnePmtMade true
+    // Make 'Payment History' header visible:
+    // Use state value for this, not DOM manipulation inside of a method:
+    // Change the 'display' attribute of PH header, based on a state value
     this.setState(
       {
-        principal: newPrincipal,
-        totalBalance: newBalance,
-        prevInterestOwed: prevInterestOwed,
-        prevPrincipal: prevPrincipal,
-        interestOwed: newInterestOwed,
-        totalMinimumPayment: totalMinimumPayment,
+        atLeastOnePmtMade: true,
+        historyHeaderDisplay: "block",
       },
       () => {
-        // Set value of placeholder of payment field to either the total remaining balance if less than or equal to 100 or a min-max range if over 100.
-        let pmtPlaceholderValue;
-        if (this.state.totalBalance <= 100) {
-          pmtPlaceholderValue = Number(this.state.totalBalance).toLocaleString(
-            undefined,
-            {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }
-          );
-          // Set value of min accepted value in payment field when total balance is less than or equal to 100:
-          document.getElementById("payment").min = Number(
-            this.state.totalBalance
-          ).toFixed(2);
-          // Set value of max accepted value in payment field when total balance is less than or equal to 100:
-          document.getElementById("payment").max = Number(
-            this.state.totalBalance
-          ).toFixed(2);
-        } else {
-          // Set placeholder value when balance is over 100:
-          pmtPlaceholderValue =
-            "$" +
-            this.state.totalMinimumPayment.toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }) +
-            " - " +
-            "$" +
-            this.state.totalBalance.toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            });
-          // Set value of min accepted value in payment field when total balance is over 100:
-          document.getElementById("payment").min = Number(
-            this.state.totalMinimumPayment
-          ).toFixed(2);
-          document.getElementById("payment").max = Number(
-            this.state.totalBalance
-          ).toFixed(2);
-        }
-        // Apply whichever placeholder value applies to the situation, to the placeholder of the payment field:
-        document.getElementById("payment").placeholder = pmtPlaceholderValue;
-        // Disable payment field, reset button, & submit button after final payment is made:
-        if (Number(Number(this.state.totalBalance).toFixed(2)) === 0) {
-          document.getElementById("payment").setAttribute("disabled", "true");
-          document.getElementById("resetBtn").setAttribute("disabled", "true");
-          document.getElementById("submitBtn").setAttribute("disabled", "true");
-        }
+        console.log(this.state.atLeastOnePmtMade);
       }
     );
+
+    // Reset the form:
+    // Is this possible without DOM manipulation here?
+    document.getElementById("paymentForm").reset();
+    // Scroll to bottom of page (to most-recent payment history item):
+    // Is this considered DOM manipulation?
+    function scrollToBottom() {
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+    setTimeout(scrollToBottom, 750);
   };
 
   render() {
@@ -291,6 +329,7 @@ class App extends React.Component {
                   min="1"
                   step="0.01"
                   placeholder="Debt Principal"
+                  disabled={this.state.atLeastOnePmtMade}
                   required
                 />
               </div>
@@ -306,6 +345,7 @@ class App extends React.Component {
                   type="number"
                   step="0.001"
                   placeholder="Interest Rate"
+                  disabled={this.state.atLeastOnePmtMade}
                   required
                 />
               </div>
@@ -326,17 +366,11 @@ class App extends React.Component {
                 min={(
                   this.state.principal / 100 +
                   (this.state.principal * this.state.interestRate) / 100 / 12
-                ).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                ).toFixed(2)}
                 max={(
                   this.state.principal +
                   (this.state.principal * this.state.interestRate) / 100 / 12
-                ).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                ).toFixed(2)}
                 onChange={this.handleChange}
                 placeholder={
                   "$" +
@@ -374,6 +408,7 @@ class App extends React.Component {
             </div>
           </form>
           <PaymentHistory
+            historyHeaderDisplay={this.state.historyHeaderDisplay}
             paymentsArray={this.state.paymentsArray}
             scrollToTop={this.scrollToTop}
           />

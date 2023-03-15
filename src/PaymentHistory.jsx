@@ -3,10 +3,10 @@ import React from 'react';
 class PaymentHistory extends React.Component {
     render() {
         // 'Import' paymentsArray from App.js, which is passed on thru props, and deconstruct immediately:
-        const { paymentsArray, scrollToTop } = this.props;
+        const { historyHeaderDisplay, paymentsArray, scrollToTop } = this.props;
         return (
             <div id='paymentHistory'>
-                <header id='pmtHistorySectionHeader' className='invisible'>Payment History</header>
+                <header id='pmtHistorySectionHeader' style={{display: historyHeaderDisplay}}>Payment History</header>
                 {paymentsArray.map((pmt) => (
                     <div key={pmt.transactionNumber} className="paymentHistoryItem">
                         <div id='historyItemHeader'>
@@ -22,7 +22,7 @@ class PaymentHistory extends React.Component {
                                 <p key={pmt.transactionNumber + 'principal'}><span>Current Principal:</span> ${pmt.principal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
                             </div>
                             <div className='historyItemComponent'>
-                                <p key={pmt.transactionNumber + 'prevInterestOwed'}><span>Interest Due This Payment:</span> ${ pmt.prevInterestOwed.toLocaleString(undefined,{minimumFractionDigits: 2,
+                                <p key={pmt.transactionNumber + 'prevInterestOwed'}><span>Interest Due This Payment:</span> ${ pmt.intPmt.toLocaleString(undefined,{minimumFractionDigits: 2,
                                 maximumFractionDigits: 2}) }</p>
                                 <p key={pmt.transactionNumber + 'interestPayment'}><span>Interest Paid:</span> ${ pmt.intPmt.toLocaleString(undefined,{minimumFractionDigits: 2,
                                 maximumFractionDigits: 2})  }</p>
