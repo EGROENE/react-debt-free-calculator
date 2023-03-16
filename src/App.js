@@ -35,7 +35,14 @@ class App extends React.Component {
   }
 
   // Method to round numbers to nearest cent:
-  cleanValue = (val) => parseFloat(val.toFixed(2));
+  //cleanValue = (val) => parseFloat(val.toFixed(2));
+  cleanValue = (val) => {
+    if (!val.isInteger) {
+      return Number(Number(String(val) + "1").toFixed(2));
+    } else {
+      return Number(val.toFixed(2));
+    }
+  };
 
   // Method to scroll to top of page:
   scrollToTop = () => {
@@ -45,14 +52,19 @@ class App extends React.Component {
   // Method to reset payment field, Principal, Interest Payment, Interest Rate state values:
   // Should reset principal, intPmt, interestRate, min/max pmts, placeholder only if no payments have been made. Otherwise, it should reset the value of the pmt field alone to blank.
   resetPaymentField = () => {
-    this.setState({
-      principal: 0,
-      intPmt: 0,
-      interestRate: "",
-      totalMinimumPayment: 0,
-      totalMaximumPayment: 0,
-      pmtPlaceholder: "",
-    });
+    if (!this.state.atLeastOnePmtMade) {
+      this.setState({
+        principal: 0,
+        intPmt: 0,
+        interestRate: "",
+        totalMinimumPayment: 0,
+        totalMaximumPayment: 0,
+        pmtPlaceholder: "",
+      });
+    } else {
+      // AGAIN, I SEE NO OTHER WAY OF DOING THIS, AND THIS PROVIDES A MUCH BETTER UX
+      document.getElementById("paymentForm").reset();
+    }
   };
 
   /* handleChange = ({ target: { name, value } }) => {
@@ -99,36 +111,23 @@ class App extends React.Component {
   updatePaymentInfo = () => {
     // Current total balance (a.k.a. the total balance before current payment is made) will be passed to value of state prevBalance below.
     //let prevBalance = Number(this.state.totalBalance);
-    console.log(this.state.principal);
-    console.log(this.state.interestRate);
-    console.log(Number(this.state.interestRate) / 100 + 1);
     let prevBalance =
       this.state.principal +
       (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
+    //prevBalance = this.cleanValue(prevBalance);
     console.log(prevBalance);
 
     // Current interest payment (a.k.a. the interest payment before current payment is made):
     // Consolidate these in payments array. IOW, prev interest owed equals the int paid.
     //let intPmt = Number(Number(this.state.interestOwed).toFixed(2));
-    let intPmt = Number(
-      (
-        (this.state.principal * Number(this.state.interestRate)) /
-        100 /
-        12
-      ).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
-    );
+    let intPmt =
+      (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
+    //intPmt = this.cleanValue(intPmt);
     console.log(intPmt);
 
     // Current total payment:
-    let currentPayment = Number(
-      this.state.payment.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
-    );
+    let currentPayment = this.state.payment;
+    //currentPayment = this.cleanValue(currentPayment);
     console.log(currentPayment);
 
     // Principal before current payment is made:
@@ -138,7 +137,8 @@ class App extends React.Component {
         maximumFractionDigits: 2,
       })
     ); */
-    let prevPrincipal = Number(this.state.principal.toFixed(2));
+    let prevPrincipal = this.state.principal;
+    //prevPrincipal = this.cleanValue(prevPrincipal);
     console.log(prevPrincipal);
 
     /* let prevBalance = prevPrincipal - currentPayment;
@@ -153,12 +153,8 @@ class App extends React.Component {
     console.log(newPrincipal);
 
     // Calculate interest owed before current payment is made:
-    let prevInterestOwed = Number(
-      Number(this.state.interestOwed).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
-    );
+    let prevInterestOwed = this.state.interestOwed;
+    //prevInterestOwed = this.cleanValue(prevInterestOwed);
     console.log(prevInterestOwed);
 
     // Get new interest balance. (after current payment is made):
@@ -166,19 +162,14 @@ class App extends React.Component {
       ((newPrincipal * Number(this.state.interestRate)) / 100 / 12).toFixed(2)
     ); */
     let newInterestOwed = Number(
-      (
-        (newPrincipal * Number(this.state.interestRate)) /
-        100 /
-        12
-      ).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+      (newPrincipal * Number(this.state.interestRate)) / 100 / 12
     );
+    //newInterestOwed = this.cleanValue(newInterestOwed);
     console.log(newInterestOwed);
 
     // Get new total balance (after current payment is made):
     let newBalance = Number(newPrincipal + newInterestOwed);
+    console.log(newBalance);
 
     // If principal payment is equal to the principal balance...
     // aka if user pays off entire principal:
@@ -186,34 +177,18 @@ class App extends React.Component {
       newPrincipal = 0;
     }
 
+    // MAY NOT NEED THIS! DEPENDS IF minPrincipalPayment & totalMinimumPayment ARE NEEDED
     // Set new intPmt:
     // intPmt state value will be set to this
     let newIntPmt = Number(
       (newPrincipal * (Number(this.state.interestRate) / 100)) / 12
     );
+    //newIntPmt = this.cleanValue(newIntPmt);
 
+    // MAY NOT NEED THESE!
     // Calculate new minimum payment:
     let minPrincipalPayment = newPrincipal * 0.01;
     let totalMinimumPayment = minPrincipalPayment + newIntPmt;
-
-    console.log(
-      parseFloat(
-        (
-          this.state.principal / 100 +
-          (this.state.principal * this.state.interestRate) / 100 / 12
-        ).toFixed(2)
-      )
-    );
-
-    console.log(
-      (
-        this.state.principal / 100 +
-        (this.state.principal * this.state.interestRate) / 100 / 12
-      ).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
-    );
 
     // Get the date and time of when user submits payment:
     let paymentDate = new Date();
@@ -363,20 +338,58 @@ class App extends React.Component {
                 id="payment"
                 type="number"
                 step="0.01"
-                min={(
+                min={String(
+                  Number(
+                    (
+                      Number((this.state.principal / 100).toFixed(2)) +
+                      (this.state.principal * this.state.interestRate) /
+                        100 /
+                        12
+                    ).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  )
+                )}
+                /* min={this.cleanValue(
                   this.state.principal / 100 +
-                  (this.state.principal * this.state.interestRate) / 100 / 12
-                ).toFixed(2)}
-                max={(
+                    (this.state.principal * this.state.interestRate) / 100 / 12
+                )} */
+                /* max={
+                  !(
+                    this.state.principal +
+                    (this.state.principal * this.state.interestRate) / 100 / 12
+                  ).isInteger
+                    ? Number(
+                        String(
+                          this.state.principal +
+                            (this.state.principal * this.state.interestRate) /
+                              100 /
+                              12
+                        ) + "1"
+                      ).toFixed(2)
+                    : this.state.principal +
+                      (this.state.principal * this.state.interestRate) /
+                        100 /
+                        12
+                } */
+                max={this.cleanValue(
                   this.state.principal +
-                  (this.state.principal * this.state.interestRate) / 100 / 12
-                ).toFixed(2)}
+                    (this.state.principal * this.state.interestRate) / 100 / 12
+                )}
                 onChange={this.handleChange}
                 placeholder={
                   "$" +
-                  (
-                    this.state.principal / 100 +
-                    (this.state.principal * this.state.interestRate) / 100 / 12
+                  Number(
+                    (
+                      Number((this.state.principal / 100).toFixed(2)) +
+                      (this.state.principal * this.state.interestRate) /
+                        100 /
+                        12
+                    ).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
                   ).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
