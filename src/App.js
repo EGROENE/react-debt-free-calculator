@@ -37,6 +37,7 @@ class App extends React.Component {
   // Method to round numbers to nearest cent:
   //cleanValue = (val) => parseFloat(val.toFixed(2));
   cleanValue = (val) => {
+    console.log(val.toFixed(2));
     if (!val.isInteger) {
       return Number(Number(String(val) + "1").toFixed(2));
     } else {
@@ -145,12 +146,13 @@ class App extends React.Component {
     console.log(prevBalance); */
 
     // Amount of current payment that is paid against the Principal:
-    let principalPmt = currentPayment - intPmt;
+    let principalPmt = this.cleanValue(currentPayment - intPmt);
     console.log(principalPmt);
 
     // Calculate Principal after current payment is made:
+    //let newPrincipal = prevPrincipal - principalPmt;
     let newPrincipal = prevPrincipal - principalPmt;
-    console.log(newPrincipal);
+    console.log(this.cleanValue(newPrincipal));
 
     // Calculate interest owed before current payment is made:
     let prevInterestOwed = this.state.interestOwed;
