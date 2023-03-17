@@ -348,7 +348,7 @@ class App extends React.Component {
               <label htmlFor="payment">
                 How much would you like to pay? <br />{" "}
                 <span className="sublabel">
-                  {this.state.interestRate &&
+                  {!(this.state.interestRate === "") &&
                     "Interest Rate: " + this.state.interestRate + "%"}
                 </span>
               </label>
