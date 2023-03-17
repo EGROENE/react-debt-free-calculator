@@ -37,13 +37,21 @@ class App extends React.Component {
   // Method to round numbers to nearest cent:
   //cleanValue = (val) => parseFloat(val.toFixed(2));
   cleanValue = (val) => {
+    const newVal = val.toFixed(3);
+    if (newVal.charAt(newVal.length - 1) === "5") {
+      return Number(Number(newVal + "1").toFixed(2));
+    } else {
+      return Number(Number(newVal).toFixed(2));
+    }
+  };
+  /* cleanValue = (val) => {
     console.log(val.toFixed(2));
     if (!val.isInteger) {
       return Number(Number(String(val) + "1").toFixed(2));
     } else {
       return Number(val.toFixed(2));
     }
-  };
+  }; */
 
   // Method to scroll to top of page:
   scrollToTop = () => {
