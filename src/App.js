@@ -31,6 +31,7 @@ class App extends React.Component {
       isAbleToPay: false,
       atLeastOnePmtMade: false,
       historyHeaderDisplay: "none",
+      isDebtFree: false,
     };
   }
 
@@ -53,7 +54,7 @@ class App extends React.Component {
     }
   }; */
 
-  // Method to scroll to top of page:
+  // Method to scroll to top of page (will be called upon 'Make Another Payment' button in PH items, which will only exist if the user is debt-free):
   scrollToTop = () => {
     window.scrollTo({ top: 0 });
   };
@@ -71,7 +72,7 @@ class App extends React.Component {
         pmtPlaceholder: "",
       });
     } else {
-      // AGAIN, I SEE NO OTHER WAY OF DOING THIS, AND THIS PROVIDES A MUCH BETTER UX
+      // AGAIN, I SEE NO OTHER WAY OF DOING THIS THAN TO MANIPULATE THE DOM DIRECTLY, AND THIS PROVIDES A MUCH BETTER UX
       document.getElementById("paymentForm").reset();
     }
   };
@@ -123,7 +124,7 @@ class App extends React.Component {
     let prevBalance =
       this.state.principal +
       (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
-    //prevBalance = this.cleanValue(prevBalance);
+    prevBalance = this.cleanValue(prevBalance);
     console.log(prevBalance);
 
     // Current interest payment (a.k.a. the interest payment before current payment is made):
@@ -131,7 +132,7 @@ class App extends React.Component {
     //let intPmt = Number(Number(this.state.interestOwed).toFixed(2));
     let intPmt =
       (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
-    //intPmt = this.cleanValue(intPmt);
+    intPmt = this.cleanValue(intPmt);
     console.log(intPmt);
 
     // Current total payment:
@@ -147,7 +148,7 @@ class App extends React.Component {
       })
     ); */
     let prevPrincipal = this.state.principal;
-    //prevPrincipal = this.cleanValue(prevPrincipal);
+    prevPrincipal = this.cleanValue(prevPrincipal);
     console.log(prevPrincipal);
 
     /* let prevBalance = prevPrincipal - currentPayment;
@@ -160,11 +161,11 @@ class App extends React.Component {
     // Calculate Principal after current payment is made:
     //let newPrincipal = prevPrincipal - principalPmt;
     let newPrincipal = prevPrincipal - principalPmt;
-    console.log(this.cleanValue(newPrincipal));
+    console.log(newPrincipal);
 
     // Calculate interest owed before current payment is made:
     let prevInterestOwed = this.state.interestOwed;
-    //prevInterestOwed = this.cleanValue(prevInterestOwed);
+    prevInterestOwed = this.cleanValue(prevInterestOwed);
     console.log(prevInterestOwed);
 
     // Get new interest balance. (after current payment is made):
@@ -174,12 +175,19 @@ class App extends React.Component {
     let newInterestOwed = Number(
       (newPrincipal * Number(this.state.interestRate)) / 100 / 12
     );
-    //newInterestOwed = this.cleanValue(newInterestOwed);
+    newInterestOwed = this.cleanValue(newInterestOwed);
     console.log(newInterestOwed);
 
     // Get new total balance (after current payment is made):
     let newBalance = Number(newPrincipal + newInterestOwed);
+    newBalance = this.cleanValue(newBalance);
     console.log(newBalance);
+
+    if (newBalance === 0) {
+      this.setState({
+        isDebtFree: true,
+      });
+    }
 
     // If principal payment is equal to the principal balance...
     // aka if user pays off entire principal:
@@ -193,7 +201,8 @@ class App extends React.Component {
     let newIntPmt = Number(
       (newPrincipal * (Number(this.state.interestRate) / 100)) / 12
     );
-    //newIntPmt = this.cleanValue(newIntPmt);
+    newIntPmt = this.cleanValue(newIntPmt);
+    console.log(newIntPmt);
 
     // MAY NOT NEED THESE!
     // Calculate new minimum payment:
@@ -348,7 +357,8 @@ class App extends React.Component {
                 id="payment"
                 type="number"
                 step="0.01"
-                min={String(
+                disabled={this.state.isDebtFree}
+                /* min={String(
                   Number(
                     (
                       Number((this.state.principal / 100).toFixed(2)) +
@@ -360,6 +370,10 @@ class App extends React.Component {
                       maximumFractionDigits: 2,
                     })
                   )
+                )} */
+                min={this.cleanValue(
+                  this.state.principal / 100 +
+                    (this.state.principal * this.state.interestRate) / 100 / 12
                 )}
                 /* min={this.cleanValue(
                   this.state.principal / 100 +
