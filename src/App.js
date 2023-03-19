@@ -77,6 +77,37 @@ class App extends React.Component {
     return this.cleanValue(minPmt);
   };
 
+  // Method to set placeholder for payment field:
+  // Should be called in handleChange, updatePaymentInfo
+  setPaymentFieldPlaceholder = () => {
+    let totalBalance =
+      this.state.principal +
+      (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
+    let placeholder;
+    if (totalBalance > 0 && totalBalance <= 100) {
+      placeholder =
+        "$" +
+        totalBalance.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+    } else {
+      placeholder =
+        "$" +
+        this.getMinPmt().toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }) +
+        " - $" +
+        totalBalance.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+    }
+    console.log(placeholder);
+    return placeholder;
+  };
+
   // Method to reset payment field, Principal, Interest Payment, Interest Rate state values:
   // Should reset principal, intPmt, interestRate, min/max pmts, placeholder only if no payments have been made. Otherwise, it should reset the value of the pmt field alone to blank.
   resetPaymentField = () => {
@@ -116,6 +147,7 @@ class App extends React.Component {
         console.log(this.state.payment);
         // For my UX, this is necessary to set here. I don't think calling one method in a setState callback is callback hell...
         this.getMinPmt();
+        this.setPaymentFieldPlaceholder();
       }
     );
     // What is dataToUpdate? What's it for & what is happening here? Why +value? Maybe to convert to a number...
@@ -140,6 +172,7 @@ class App extends React.Component {
 
   updatePaymentInfo = () => {
     this.getMinPmt();
+    this.setPaymentFieldPlaceholder();
     // Current total balance (a.k.a. the total balance before current payment is made) will be passed to value of state prevBalance below.
     //let prevBalance = Number(this.state.totalBalance);
     let prevBalance =
@@ -424,7 +457,7 @@ class App extends React.Component {
                     (this.state.principal * this.state.interestRate) / 100 / 12
                 )}
                 onChange={this.handleChange}
-                placeholder={
+                /* placeholder={
                   "$" +
                   Number(
                     (
@@ -449,7 +482,8 @@ class App extends React.Component {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })
-                }
+                } */
+                placeholder={this.setPaymentFieldPlaceholder()}
                 required
               />
             </div>
