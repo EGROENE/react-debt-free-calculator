@@ -491,11 +491,16 @@ class App extends React.Component {
               <button
                 type="reset"
                 id="resetBtn"
+                disabled={this.state.isDebtFree}
                 onClick={this.resetPaymentField}
               >
                 Reset All Fields
               </button>
-              <button type="submit" id="submitBtn">
+              <button
+                type="submit"
+                id="submitBtn"
+                disabled={this.state.isDebtFree}
+              >
                 Submit Payment
               </button>
             </div>
