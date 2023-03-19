@@ -59,6 +59,24 @@ class App extends React.Component {
     window.scrollTo({ top: 0 });
   };
 
+  // Method that returns appropriate min value for payment field:
+  // Should be called in handleChange & in updatePaymentInfo
+  getMinPmt = () => {
+    let minPmt =
+      this.state.principal / 100 +
+      (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
+    console.log(minPmt);
+    let totalBalance =
+      this.state.principal +
+      (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
+    console.log(totalBalance);
+    if (totalBalance <= 100 && totalBalance > 0) {
+      minPmt = totalBalance;
+    }
+    console.log(minPmt);
+    return this.cleanValue(minPmt);
+  };
+
   // Method to reset payment field, Principal, Interest Payment, Interest Rate state values:
   // Should reset principal, intPmt, interestRate, min/max pmts, placeholder only if no payments have been made. Otherwise, it should reset the value of the pmt field alone to blank.
   resetPaymentField = () => {
@@ -96,6 +114,8 @@ class App extends React.Component {
         console.log(this.state.principal);
         console.log(this.state.interestRate);
         console.log(this.state.payment);
+        // For my UX, this is necessary to set here. I don't think calling one method in a setState callback is callback hell...
+        this.getMinPmt();
       }
     );
     // What is dataToUpdate? What's it for & what is happening here? Why +value? Maybe to convert to a number...
@@ -119,6 +139,7 @@ class App extends React.Component {
   };
 
   updatePaymentInfo = () => {
+    this.getMinPmt();
     // Current total balance (a.k.a. the total balance before current payment is made) will be passed to value of state prevBalance below.
     //let prevBalance = Number(this.state.totalBalance);
     let prevBalance =
@@ -371,10 +392,11 @@ class App extends React.Component {
                     })
                   )
                 )} */
-                min={this.cleanValue(
+                /* min={this.cleanValue(
                   this.state.principal / 100 +
                     (this.state.principal * this.state.interestRate) / 100 / 12
-                )}
+                )} */
+                min={this.getMinPmt()}
                 /* min={this.cleanValue(
                   this.state.principal / 100 +
                     (this.state.principal * this.state.interestRate) / 100 / 12
