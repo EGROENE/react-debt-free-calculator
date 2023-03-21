@@ -65,6 +65,13 @@ class App extends React.Component {
     return this.cleanValue(minPmt);
   };
 
+  getMaxPmt = () => {
+    let maxPmt =
+      this.state.principal +
+      (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
+    return this.cleanValue(maxPmt);
+  };
+
   // Method to set placeholder for payment field:
   // Should be called in handleChange, updatePaymentInfo
   setPaymentFieldPlaceholder = () => {
@@ -352,10 +359,7 @@ class App extends React.Component {
                 step="0.01"
                 disabled={this.state.isDebtFree}
                 min={this.getMinPmt()}
-                max={this.cleanValue(
-                  this.state.principal +
-                    (this.state.principal * this.state.interestRate) / 100 / 12
-                )}
+                max={this.getMaxPmt()}
                 onChange={this.handleChange}
                 placeholder={this.setPaymentFieldPlaceholder()}
                 required
