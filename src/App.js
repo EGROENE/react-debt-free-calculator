@@ -36,7 +36,6 @@ class App extends React.Component {
   }
 
   // Method to round numbers to nearest cent:
-  //cleanValue = (val) => parseFloat(val.toFixed(2));
   cleanValue = (val) => {
     const newVal = val.toFixed(3);
     if (newVal.charAt(newVal.length - 1) === "5") {
@@ -45,14 +44,6 @@ class App extends React.Component {
       return Number(Number(newVal).toFixed(2));
     }
   };
-  /* cleanValue = (val) => {
-    console.log(val.toFixed(2));
-    if (!val.isInteger) {
-      return Number(Number(String(val) + "1").toFixed(2));
-    } else {
-      return Number(val.toFixed(2));
-    }
-  }; */
 
   // Method to scroll to top of page (will be called upon 'Make Another Payment' button in PH items, which will only exist if the user is debt-free):
   scrollToTop = () => {
@@ -65,15 +56,12 @@ class App extends React.Component {
     let minPmt =
       this.state.principal / 100 +
       (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
-    console.log(minPmt);
     let totalBalance =
       this.state.principal +
       (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
-    console.log(totalBalance);
     if (totalBalance <= 100 && totalBalance > 0) {
       minPmt = totalBalance;
     }
-    console.log(minPmt);
     return this.cleanValue(minPmt);
   };
 
@@ -104,7 +92,6 @@ class App extends React.Component {
           maximumFractionDigits: 2,
         });
     }
-    console.log(placeholder);
     return placeholder;
   };
 
@@ -126,12 +113,6 @@ class App extends React.Component {
     }
   };
 
-  /* handleChange = ({ target: { name, value } }) => {
-    this.setState({
-      [`${name}`]: value,
-    });
-  }; */
-
   // Instead of Andrey's method of disabling pmt button until value of payment field meets requirements, I want to automatically update the min, max, & placeholder of payment field as user enters info. The user being able to see the min/max in placeholder is much more user-friendly. I see no other way to do it than with a callback in setState.
   handleChange = (e) => {
     // Destructure the name of the input field, as well as its value:
@@ -142,9 +123,6 @@ class App extends React.Component {
         [`${name}`]: value,
       },
       () => {
-        console.log(this.state.principal);
-        console.log(this.state.interestRate);
-        console.log(this.state.payment);
         // For my UX, this is necessary to set here. I don't think calling one method in a setState callback is callback hell...
         this.getMinPmt();
         this.setPaymentFieldPlaceholder();
@@ -154,8 +132,8 @@ class App extends React.Component {
     const dataToUpdate = {
       [`${name}`]: +value,
     };
-    console.log(dataToUpdate);
-    if (
+    // Below is Andrey's method of enabling user to make a payment. If the value entered into payment field is greater than or equal to the min payment & less than or equal to the max payment, payment submission is allowed. I prefer using my method of setting the min/max of payment field when user enters principal, interest rate, and makes a payment, even though I need to call a couple methods in a setState callback. It allows for a much better UX, and I would like to display this as a portfolio project, so anyone who investigates this project should be clear as to how it works.
+    /* if (
       name === "payment" &&
       +value >= this.state.totalMinimumPayment &&
       +value <= this.state.totalMaximumPayment
@@ -163,7 +141,7 @@ class App extends React.Component {
       dataToUpdate.isAbleToPay = true;
     } else {
       dataToUpdate.isAbleToPay = false;
-    }
+    } */
     this.setState((prev) => ({
       ...prev,
       ...dataToUpdate,
@@ -173,70 +151,40 @@ class App extends React.Component {
   updatePaymentInfo = () => {
     this.getMinPmt();
     this.setPaymentFieldPlaceholder();
-    // Current total balance (a.k.a. the total balance before current payment is made) will be passed to value of state prevBalance below.
-    //let prevBalance = Number(this.state.totalBalance);
     let prevBalance =
       this.state.principal +
       (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
     prevBalance = this.cleanValue(prevBalance);
-    console.log(prevBalance);
 
     // Current interest payment (a.k.a. the interest payment before current payment is made):
-    // Consolidate these in payments array. IOW, prev interest owed equals the int paid.
-    //let intPmt = Number(Number(this.state.interestOwed).toFixed(2));
-    let intPmt =
-      (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
-    intPmt = this.cleanValue(intPmt);
-    console.log(intPmt);
-
+    let intPmt = this.cleanValue(
+      (this.state.principal * Number(this.state.interestRate)) / 100 / 12
+    );
     // Current total payment:
     let currentPayment = this.state.payment;
-    //currentPayment = this.cleanValue(currentPayment);
-    console.log(currentPayment);
 
     // Principal before current payment is made:
-    /* let prevPrincipal = Number(
-      this.state.principal.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
-    ); */
-    let prevPrincipal = this.state.principal;
-    prevPrincipal = this.cleanValue(prevPrincipal);
-    console.log(prevPrincipal);
-
-    /* let prevBalance = prevPrincipal - currentPayment;
-    console.log(prevBalance); */
+    // Round to 2 decimals, just to be safe
+    let prevPrincipal = this.cleanValue(this.state.principal);
 
     // Amount of current payment that is paid against the Principal:
     let principalPmt = this.cleanValue(currentPayment - intPmt);
-    console.log(principalPmt);
 
     // Calculate Principal after current payment is made:
-    //let newPrincipal = prevPrincipal - principalPmt;
     let newPrincipal = prevPrincipal - principalPmt;
-    console.log(newPrincipal);
 
     // Calculate interest owed before current payment is made:
-    let prevInterestOwed = this.state.interestOwed;
-    prevInterestOwed = this.cleanValue(prevInterestOwed);
-    console.log(prevInterestOwed);
+    let prevInterestOwed = this.cleanValue(this.state.interestOwed);
 
     // Get new interest balance. (after current payment is made):
-    /* let newInterestOwed = parseFloat(
-      ((newPrincipal * Number(this.state.interestRate)) / 100 / 12).toFixed(2)
-    ); */
-    let newInterestOwed = Number(
+    let newInterestOwed = this.cleanValue(
       (newPrincipal * Number(this.state.interestRate)) / 100 / 12
     );
-    newInterestOwed = this.cleanValue(newInterestOwed);
-    console.log(newInterestOwed);
 
     // Get new total balance (after current payment is made):
-    let newBalance = Number(newPrincipal + newInterestOwed);
-    newBalance = this.cleanValue(newBalance);
-    console.log(newBalance);
+    let newBalance = this.cleanValue(newPrincipal + newInterestOwed);
 
+    // If new balance (balance after payment) is 0, then set isDebtFree to true, which will be used to disable reset & submit button, as well as the payment field.
     if (newBalance === 0) {
       this.setState({
         isDebtFree: true,
@@ -249,16 +197,12 @@ class App extends React.Component {
       newPrincipal = 0;
     }
 
-    // MAY NOT NEED THIS! DEPENDS IF minPrincipalPayment & totalMinimumPayment ARE NEEDED
     // Set new intPmt:
-    // intPmt state value will be set to this
-    let newIntPmt = Number(
+    // intPmt state value for future payments will be set to this
+    let newIntPmt = this.cleanValue(
       (newPrincipal * (Number(this.state.interestRate) / 100)) / 12
     );
-    newIntPmt = this.cleanValue(newIntPmt);
-    console.log(newIntPmt);
 
-    // MAY NOT NEED THESE!
     // Calculate new minimum payment:
     let minPrincipalPayment = newPrincipal * 0.01;
     let totalMinimumPayment = minPrincipalPayment + newIntPmt;
@@ -324,18 +268,13 @@ class App extends React.Component {
     // Make 'Payment History' header visible:
     // Use state value for this, not DOM manipulation inside of a method:
     // Change the 'display' attribute of PH header, based on a state value
-    this.setState(
-      {
-        atLeastOnePmtMade: true,
-        historyHeaderDisplay: "block",
-      },
-      () => {
-        console.log(this.state.atLeastOnePmtMade);
-      }
-    );
+    this.setState({
+      atLeastOnePmtMade: true,
+      historyHeaderDisplay: "block",
+    });
 
     // Reset the form:
-    // Is this possible without DOM manipulation here?
+    // Is this possible without DOM manipulation here? I don't think so...
     document.getElementById("paymentForm").reset();
     // Scroll to bottom of page (to most-recent payment history item):
     // Is this considered DOM manipulation?
@@ -412,77 +351,12 @@ class App extends React.Component {
                 type="number"
                 step="0.01"
                 disabled={this.state.isDebtFree}
-                /* min={String(
-                  Number(
-                    (
-                      Number((this.state.principal / 100).toFixed(2)) +
-                      (this.state.principal * this.state.interestRate) /
-                        100 /
-                        12
-                    ).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  )
-                )} */
-                /* min={this.cleanValue(
-                  this.state.principal / 100 +
-                    (this.state.principal * this.state.interestRate) / 100 / 12
-                )} */
                 min={this.getMinPmt()}
-                /* min={this.cleanValue(
-                  this.state.principal / 100 +
-                    (this.state.principal * this.state.interestRate) / 100 / 12
-                )} */
-                /* max={
-                  !(
-                    this.state.principal +
-                    (this.state.principal * this.state.interestRate) / 100 / 12
-                  ).isInteger
-                    ? Number(
-                        String(
-                          this.state.principal +
-                            (this.state.principal * this.state.interestRate) /
-                              100 /
-                              12
-                        ) + "1"
-                      ).toFixed(2)
-                    : this.state.principal +
-                      (this.state.principal * this.state.interestRate) /
-                        100 /
-                        12
-                } */
                 max={this.cleanValue(
                   this.state.principal +
                     (this.state.principal * this.state.interestRate) / 100 / 12
                 )}
                 onChange={this.handleChange}
-                /* placeholder={
-                  "$" +
-                  Number(
-                    (
-                      Number((this.state.principal / 100).toFixed(2)) +
-                      (this.state.principal * this.state.interestRate) /
-                        100 /
-                        12
-                    ).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  ).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }) +
-                  " - " +
-                  "$" +
-                  (
-                    this.state.principal +
-                    (this.state.principal * this.state.interestRate) / 100 / 12
-                  ).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })
-                } */
                 placeholder={this.setPaymentFieldPlaceholder()}
                 required
               />
