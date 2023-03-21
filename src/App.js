@@ -292,6 +292,26 @@ class App extends React.Component {
   };
 
   render() {
+    const principalInterestFieldsInfo = [
+      {
+        htmlFor: "principal",
+        fieldLabel: "How much is your debt principal?",
+        id: "principal",
+        name: "principal",
+        min: "1",
+        step: "0.01",
+        placeholder: "Debt Principal",
+      },
+      {
+        htmlFor: "interestRate",
+        fieldLabel: "How much is the interest rate?",
+        id: "interestRate",
+        name: "interestRate",
+        min: "0",
+        step: "0.001",
+        placeholder: "Interest Rate",
+      },
+    ];
     return (
       <div id="hero" className="App">
         <header className="App-header">
@@ -311,38 +331,22 @@ class App extends React.Component {
           </div>
           <form id="paymentForm" onSubmit={this.handleSubmission}>
             <div className="form-row">
-              <div className="form-item">
-                <label htmlFor="principal">
-                  How much is your debt principal?
-                </label>
-                <input
-                  id="debtPrincipal"
-                  onChange={this.handleChange}
-                  name="principal"
-                  type="number"
-                  min="1"
-                  step="0.01"
-                  placeholder="Debt Principal"
-                  disabled={this.state.atLeastOnePmtMade}
-                  required
-                />
-              </div>
-              <div className="form-item">
-                <label htmlFor="interestRate">
-                  How much is the interest rate?
-                </label>
-                <input
-                  onChange={this.handleChange}
-                  id="interestRate"
-                  min="0"
-                  name="interestRate"
-                  type="number"
-                  step="0.001"
-                  placeholder="Interest Rate"
-                  disabled={this.state.atLeastOnePmtMade}
-                  required
-                />
-              </div>
+              {principalInterestFieldsInfo.map((field) => (
+                <div className="form-item">
+                  <label htmlFor={field.htmlFor}>{field.fieldLabel}</label>
+                  <input
+                    id={field.id}
+                    onChange={this.handleChange}
+                    name={field.name}
+                    type="number"
+                    min={field.min}
+                    step={field.step}
+                    placeholder={field.placeholder}
+                    disabled={this.state.atLeastOnePmtMade}
+                    required
+                  />
+                </div>
+              ))}
             </div>
             <div className="form-item">
               <label htmlFor="payment">
