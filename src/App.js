@@ -123,7 +123,7 @@ class App extends React.Component {
         [`${name}`]: value,
       },
       () => {
-        // For my UX, this is necessary to set here. I don't think calling one method in a setState callback is callback hell...
+        // For my UX, this is necessary to set here. I don't think calling two methods in a setState callback is callback hell...
         this.getMinPmt();
         this.setPaymentFieldPlaceholder();
       }
