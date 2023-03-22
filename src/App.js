@@ -272,20 +272,16 @@ class App extends React.Component {
     event.preventDefault();
     // Update values upon payment:
     this.updatePaymentInfo();
-    // Make atLeastOnePmtMade true
-    // Make 'Payment History' header visible:
-    // Use state value for this, not DOM manipulation inside of a method:
-    // Change the 'display' attribute of PH header, based on a state value
+    // Make atLeastOnePmtMade true, so Principal & Interest Rate fields are disabled after the first payment & so that, if user resets the form before making one payment, original state values of principal, intPmt, interestRate, totalMinimumPayment, totalMaximumPayment, and pmtPlaceholder are reset to original values (either 0 or an empty string). See resetPaymentField method for more info.
+    // Also, historyHeaderDisplay display is set to 'block' after one payment. Originally, its display is 'none'.
     this.setState({
       atLeastOnePmtMade: true,
       historyHeaderDisplay: "block",
     });
 
     // Reset the form:
-    // Is this possible without DOM manipulation here? I don't think so...
     document.getElementById("paymentForm").reset();
-    // Scroll to bottom of page (to most-recent payment history item):
-    // Is this considered DOM manipulation?
+    // Scroll to bottom of page (so most-recent payment history item is visible):
     function scrollToBottom() {
       window.scrollTo(0, document.body.scrollHeight);
     }
