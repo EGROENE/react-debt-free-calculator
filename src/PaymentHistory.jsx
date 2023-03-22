@@ -4,42 +4,32 @@ class PaymentHistory extends React.Component {
     render() {
         // 'Import' paymentsArray from App.js, which is passed on thru props, and deconstruct immediately:
         const { historyHeaderDisplay, paymentsArray, scrollToTop } = this.props;
+        // Create array of objects containing PH item component info:
+        // Then, this array of objects will be looped thru inside of componentContainer
+        const paymentHistoryItemComponentsInfo = [
+            { compContainerKey: 'principalInfoContainer', infoName1: 'prevPrincipal', varName1: 'prevPrincipal', label1: 'Previous Principal: ', infoName2: 'principalPayment', varName2: 'principalPmt', label2: 'Principal Paid: ', infoName3: 'principal', varName3: 'principal', label3: 'Current Principal: ', icon: '' },
+            { compContainerKey: 'interestInfoContainer', infoName1: 'prevInterestOwed', varName1: 'intPmt', label1: 'Interest Due This Payment: ', infoName2: 'interestPayment', varName2: 'intPmt', label2: 'Interest Paid: ', infoName3: 'interestOwed', varName3: 'interestOwed', label3: 'Interest Owed On Next Payment: ', icon: <i className="fas fa-info-circle"title= "Current Principal * Interest Rate / 12"></i> },
+            { compContainerKey: 'balanceInfoContainer', infoName1: 'prevBalance', varName1: 'prevBalance', label1: 'Previous Balance: ', infoName2: 'currentPayment', varName2: 'payment', label2: 'Total Current Payment: ', infoName3: 'newBalance', varName3: 'newBalance', label3: 'Current Balance: ', icon: <i className="fas fa-info-circle" title= "Current Principal + Interest Owed on Next Payment"></i> },
+        ]
         return (
             <div id='paymentHistory'>
                 <header id='pmtHistorySectionHeader' style={{display: historyHeaderDisplay}}>Payment History</header>
                 {paymentsArray.map((pmt) => (
                     <div key={pmt.transactionNumber} className="paymentHistoryItem">
                         <div id='historyItemHeader'>
-                            <div key={pmt.transactionNumber + 'transactionNumber'}><p>Transaction Number:</p> { pmt.transactionNumber }</div>
-                            <div key={pmt.transactionNumber + 'paymentDate'}><p>Date of Payment:</p> { pmt.paymentDate.toLocaleString() }</div>
+                            <div key={pmt.transactionNumber + 'transactionNumber'}><p>Transaction Number: </p> {pmt.transactionNumber }</div>
+                            <div key={pmt.transactionNumber + 'paymentDate'}><p>Date of Payment: </p> {pmt.paymentDate.toLocaleString() }</div>
                         </div>
                         <div className='componentContainer'>
-                            <div className='historyItemComponent'>
-                                <p key={pmt.transactionNumber + 'prevPrincipal'}><span>Previous Principal:</span> ${ pmt.prevPrincipal.toLocaleString(undefined,{minimumFractionDigits: 2,
-                                maximumFractionDigits: 2}) }</p>
-                                <p key={pmt.transactionNumber + 'principalPayment'}><span>Principal Paid:</span> ${ pmt.principalPmt.toLocaleString(undefined,{minimumFractionDigits: 2,
-                                maximumFractionDigits: 2})  }</p>
-                                <p key={pmt.transactionNumber + 'principal'}><span>Current Principal:</span> ${pmt.principal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
-                            </div>
-                            <div className='historyItemComponent'>
-                                <p key={pmt.transactionNumber + 'prevInterestOwed'}><span>Interest Due This Payment:</span> ${ pmt.intPmt.toLocaleString(undefined,{minimumFractionDigits: 2,
-                                maximumFractionDigits: 2}) }</p>
-                                <p key={pmt.transactionNumber + 'interestPayment'}><span>Interest Paid:</span> ${ pmt.intPmt.toLocaleString(undefined,{minimumFractionDigits: 2,
-                                maximumFractionDigits: 2})  }</p>
-                                <p key={pmt.transactionNumber + 'interestOwed'}><span>Interest Owed on Next Payment:</span> ${pmt.interestOwed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} 
-                                    <i className="fas fa-info-circle"title= "Current Principal * Interest Rate / 12"></i>
-                                </p>
-                            </div>
-                            <div className='historyItemComponent'>
-                                <p key={pmt.transactionNumber + 'prevBalance'}><span>Previous Balance:</span> ${ pmt.prevBalance.toLocaleString(undefined,{minimumFractionDigits: 2,
-                                maximumFractionDigits: 2}) }</p>
-                                <p key={pmt.transactionNumber + 'currentPayment'}><span>Total Current Payment:</span> ${ pmt.payment.toLocaleString(undefined,{minimumFractionDigits: 2,
-                                maximumFractionDigits: 2})  }</p>
-                                <p key={pmt.transactionNumber + 'newBalance'}><span>Current Balance:</span> ${ pmt.newBalance.toLocaleString(undefined,{minimumFractionDigits: 2,
-                                maximumFractionDigits: 2})  }
-                                     <i className="fas fa-info-circle" title= "Current Principal + Interest Owed on Next Payment"></i>
-                                </p>
-                            </div>
+                            {paymentHistoryItemComponentsInfo.map((comp) => (
+                                <div className='historyItemComponent' key={pmt.transactionNumber + comp.compContainerKey}>
+                                    <p key={pmt.transactionNumber + comp.infoName1}><span>{comp.label1}</span>${pmt[comp.varName1].toLocaleString(undefined,{minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2}) }</p>
+                                    <p key={pmt.transactionNumber + comp.infoName2}><span>{comp.label2}</span>${ pmt[comp.varName2].toLocaleString(undefined,{minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2})  }</p>
+                                    <p key={pmt.transactionNumber + comp.infoName3}><span>{comp.label3}</span>${pmt[comp.varName3].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                                </div>
+                            ))}
                         </div>
                         {Number((pmt.newBalance).toLocaleString(undefined,{minimumFractionDigits: 2,
                                 maximumFractionDigits: 2})) === 0 
