@@ -5,7 +5,7 @@ class PaymentHistory extends React.Component {
         // 'Import' paymentsArray from App.js, which is passed on thru props, and deconstruct immediately:
         const { historyHeaderDisplay, paymentsArray, scrollToTop } = this.props;
         // Create array of objects containing PH item component info:
-        // Then, this array of objects will be looped thru inside of componentContainer
+        // Then, this array of objects will be mapped thru inside of componentContainer
         const paymentHistoryItemComponentsInfo = [
             { compContainerKey: 'principalInfoContainer', infoName1: 'prevPrincipal', varName1: 'prevPrincipal', label1: 'Previous Principal: ', icon1: '', infoName2: 'principalPayment', varName2: 'principalPmt', label2: 'Principal Paid: ', icon2: '', infoName3: 'principal', varName3: 'principal', label3: 'Current Principal: ', icon3: '' },
             { compContainerKey: 'interestInfoContainer', infoName1: 'prevInterestOwed', varName1: 'intPmt', label1: 'Interest Due This Payment: ', icon1: '', infoName2: 'interestPayment', varName2: 'intPmt', label2: 'Interest Paid: ', icon2: '', infoName3: 'interestOwed', varName3: 'interestOwed', label3: 'Interest Owed On Next Payment: ', icon3: <i className="fas fa-info-circle"title= "Current Principal * Interest Rate / 12"></i> },
