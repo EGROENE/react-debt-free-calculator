@@ -23,10 +23,8 @@ class PaymentHistory extends React.Component {
                         <div className='componentContainer'>
                             {paymentHistoryItemComponentsInfo.map((comp) => (
                                 <div className='historyItemComponent' key={pmt.transactionNumber + comp.compContainerKey}>
-                                    <p key={pmt.transactionNumber + comp.infoName1}><span>{comp.label1}</span>${pmt[comp.varName1].toLocaleString(undefined,{minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2})} {comp.icon1}</p>
-                                    <p key={pmt.transactionNumber + comp.infoName2}><span>{comp.label2}</span>${ pmt[comp.varName2].toLocaleString(undefined,{minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2})} {comp.icon2}</p>
+                                    <p key={pmt.transactionNumber + comp.infoName1}><span>{comp.label1}</span>${pmt[comp.varName1].toLocaleString(undefined,{minimumFractionDigits: 2,maximumFractionDigits: 2})} {comp.icon1}</p>
+                                    <p key={pmt.transactionNumber + comp.infoName2}><span>{comp.label2}</span>${ pmt[comp.varName2].toLocaleString(undefined,{minimumFractionDigits: 2,maximumFractionDigits: 2})} {comp.icon2}</p>
                                     <p key={pmt.transactionNumber + comp.infoName3}><span>{comp.label3}</span>${pmt[comp.varName3].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} {comp.icon3}</p>
                                 </div>
                             ))}
