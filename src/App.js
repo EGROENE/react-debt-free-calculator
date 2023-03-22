@@ -298,6 +298,9 @@ class App extends React.Component {
         fieldLabel: "How much is your debt principal?",
         id: "principal",
         name: "principal",
+        key: "principal",
+        labelKey: "principalLabel",
+        inputKey: "principalInput",
         min: "1",
         step: "0.01",
         placeholder: "Debt Principal",
@@ -307,6 +310,9 @@ class App extends React.Component {
         fieldLabel: "How much is the interest rate?",
         id: "interestRate",
         name: "interestRate",
+        key: "interestRate",
+        labelKey: "interestRateLabel",
+        inputKey: "interestRateInput",
         min: "0",
         step: "0.001",
         placeholder: "Interest Rate",
@@ -332,9 +338,12 @@ class App extends React.Component {
           <form id="paymentForm" onSubmit={this.handleSubmission}>
             <div className="form-row">
               {principalInterestFieldsInfo.map((field) => (
-                <div className="form-item">
-                  <label htmlFor={field.htmlFor}>{field.fieldLabel}</label>
+                <div className="form-item" key={field.key}>
+                  <label htmlFor={field.htmlFor} key={field.labelKey}>
+                    {field.fieldLabel}
+                  </label>
                   <input
+                    key={field.inputKey}
                     id={field.id}
                     onChange={this.handleChange}
                     name={field.name}
