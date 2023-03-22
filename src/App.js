@@ -120,7 +120,6 @@ class App extends React.Component {
     }
   };
 
-  // Instead of Andrey's method of disabling pmt button until value of payment field meets requirements, I want to automatically update the min, max, & placeholder of payment field as user enters info. The user being able to see the min/max in placeholder is much more user-friendly. I see no other way to do it than with a callback in setState.
   handleChange = (e) => {
     // Destructure the name of the input field, as well as its value:
     const { name, value } = e.target;
@@ -130,8 +129,10 @@ class App extends React.Component {
         [`${name}`]: value,
       },
       () => {
-        // For my UX, this is necessary to set here. I don't think calling two methods in a setState callback is callback hell...
+        // I prefer setting the min/max of payment field when user enters principal, interest rate, and makes a payment, even though I need to call a few methods in a setState callback. It allows for a much more understandable program. I would like to display this as a portfolio project, so anyone who investigates this project should be clear as to how it works.
+        // These set the min/max of payment field, as well as its placeholder. Again, this is more user-friendly, & I don't think calling a few methods in a setState callback is callback hell...
         this.getMinPmt();
+        this.getMaxPmt();
         this.setPaymentFieldPlaceholder();
       }
     );
@@ -139,7 +140,7 @@ class App extends React.Component {
     const dataToUpdate = {
       [`${name}`]: +value,
     };
-    // Below is Andrey's method of enabling user to make a payment. If the value entered into payment field is greater than or equal to the min payment & less than or equal to the max payment, payment submission is allowed. I prefer using my method of setting the min/max of payment field when user enters principal, interest rate, and makes a payment, even though I need to call a couple methods in a setState callback. It allows for a much better UX, and I would like to display this as a portfolio project, so anyone who investigates this project should be clear as to how it works.
+    // Below is Andrey's method of enabling user to make a payment. If the value entered into payment field is greater than or equal to the min payment & less than or equal to the max payment, payment submission is allowed.
     /* if (
       name === "payment" &&
       +value >= this.state.totalMinimumPayment &&
