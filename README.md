@@ -1,3 +1,4 @@
+# React Debt-Free Calculator
 This is a project I completed for the Devslopes Academy, and is my first-ever React project. I was tasked with building a debt-free calculator. Here's how it works:
 * There are three input fields, in which the user enters the Debt Principal, the Interest Rate, & the amount they would like to pay
 * Interest Owed is calculated anew with each payment made; it is calculated as follows: Current Principal * Interest Rate / 100 / 12
