@@ -247,9 +247,12 @@ class App extends React.Component {
       paymentDate: paymentDate,
       prevBalance: prevBalance,
       interestOwed: newInterestOwed,
+      prevInterestOwed: prevInterestOwed,
       principalPmt: principalPmt,
       intPmt: intPmt,
+      totalMinimumPayment: totalMinimumPayment,
       newBalance: newBalance,
+      totalBalance: newBalance,
       prevPrincipal: prevPrincipal,
       principal: newPrincipal,
       ...prev,
@@ -257,14 +260,6 @@ class App extends React.Component {
     }));
 
     // Set state of new current principal balance, total balance, previous interest owed, previous principal, interestOwed, & totalMinimumPayment to be displayed in the history items pertaining to any future payments. These will also be used when calculating min amount of future payments:
-    this.setState({
-      principal: newPrincipal,
-      totalBalance: newBalance,
-      prevInterestOwed: prevInterestOwed,
-      prevPrincipal: prevPrincipal,
-      interestOwed: newInterestOwed,
-      totalMinimumPayment: totalMinimumPayment,
-    });
   };
 
   handleSubmission = (event) => {
