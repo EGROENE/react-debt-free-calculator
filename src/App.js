@@ -242,22 +242,28 @@ class App extends React.Component {
     });
 
     // Set state with values from current payment. The 'prev' parameter and corresponding rest operator is used in order to access previous state value of payments array & to set the state of that array to the new array, which is defined above.
-    this.setState((prev) => ({
-      transactionNumber: transactionNumber,
-      paymentDate: paymentDate,
-      prevBalance: prevBalance,
-      interestOwed: newInterestOwed,
-      prevInterestOwed: prevInterestOwed,
-      principalPmt: principalPmt,
-      intPmt: intPmt,
-      totalMinimumPayment: totalMinimumPayment,
-      newBalance: newBalance,
-      totalBalance: newBalance,
-      prevPrincipal: prevPrincipal,
-      principal: newPrincipal,
-      ...prev,
-      paymentsArray: newArray,
-    }));
+    this.setState(
+      (prev) => ({
+        transactionNumber: transactionNumber,
+        paymentDate: paymentDate,
+        prevBalance: prevBalance,
+        interestOwed: newInterestOwed,
+        prevInterestOwed: prevInterestOwed,
+        principalPmt: principalPmt,
+        intPmt: intPmt,
+        totalMinimumPayment: totalMinimumPayment,
+        newBalance: newBalance,
+        totalBalance: newBalance,
+        prevPrincipal: prevPrincipal,
+        principal: newPrincipal,
+        ...prev,
+        paymentsArray: newArray,
+      }),
+      () => {
+        console.log(this.state.principal); // old principal (why doesn't this return updated principal value?)
+        console.log(newPrincipal); // new principal
+      }
+    );
 
     // Set state of new current principal balance, total balance, previous interest owed, previous principal, interestOwed, & totalMinimumPayment to be displayed in the history items pertaining to any future payments. These will also be used when calculating min amount of future payments:
   };
