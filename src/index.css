@@ -12,9 +12,8 @@
   --size-42: 2.75rem;
   --size-48: 3rem;
   --size-56: 3.5rem;
-  --size-64: 4rem;
-/*   --react-blue: #61dafb;
- */  --react-blue: #18ffc5;
+  --size-64: 4rem;  
+  --react-blue: #ff189f;
 }
 
 html {
