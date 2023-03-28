@@ -54,11 +54,15 @@ class App extends React.Component {
   // Should be called in handleChange & in updatePaymentInfo
   getMinPmt = () => {
     let minPmt =
-      this.state.principal / 100 +
-      (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
+      this.cleanValue(this.state.principal / 100) +
+      this.cleanValue(
+        (this.state.principal * Number(this.state.interestRate)) / 100 / 12
+      );
     let totalBalance =
       this.state.principal +
-      (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
+      this.cleanValue(
+        (this.state.principal * Number(this.state.interestRate)) / 100 / 12
+      );
     if (totalBalance <= 100 && totalBalance > 0) {
       minPmt = totalBalance;
     }
@@ -68,7 +72,9 @@ class App extends React.Component {
   getMaxPmt = () => {
     let maxPmt =
       this.state.principal +
-      (this.state.principal * Number(this.state.interestRate)) / 100 / 12;
+      this.cleanValue(
+        (this.state.principal * Number(this.state.interestRate)) / 100 / 12
+      );
     return this.cleanValue(maxPmt);
   };
 
