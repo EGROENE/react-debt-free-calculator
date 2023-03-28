@@ -14,7 +14,6 @@
   --size-56: 3.5rem;
   --size-64: 4rem;  
   --react-blue: #61dafb;
-  --react-green: #0ce29b;
 }
 
 html {
@@ -38,7 +37,7 @@ code {
 }
 
 i {
-  color: var(--react-green);
+  color: var(--react-blue);
   font-size: var(--size-24);
   margin: var(--size-12);
 }
@@ -101,7 +100,7 @@ input {
 
 input:focus,
 button:focus {
-  box-shadow: 0px 0px 10px 2px var(--react-green);
+  box-shadow: 0px 0px 10px 2px var(--react-blue);
   outline: none;
 }
 
@@ -144,9 +143,9 @@ button:disabled:hover {
 }
 
 button[type = "submit"] {
-  background-color: var(--react-green);
+  background-color: var(--react-blue);
   color: black;
-  border: 2px solid var(--react-green);
+  border: 2px solid var(--react-blue);
 }
 
 #paymentHistory  {
@@ -171,7 +170,7 @@ button[type = "submit"] {
 
 .paymentHistoryItem header,
 .componentContainer span {
-  color: var(--react-green);
+  color: var(--react-blue);
 }
 
 .componentContainer {
@@ -185,7 +184,7 @@ button[type = "submit"] {
 }
 
 #historyItemHeader p {
-  color: var(--react-green);
+  color: var(--react-blue);
   margin: var(--size-8) 0px;
   font-size: var(--size-32);
 }
@@ -197,9 +196,9 @@ button[type = "submit"] {
 }
 
 #makeAnotherPayment {
-  background-color: var(--react-green);
+  background-color: var(--react-blue);
   color: black;
-  border: 2px solid var(--react-green);
+  border: 2px solid var(--react-blue);
 }
 
 #makeAnotherPayment:hover {
