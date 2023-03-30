@@ -45,9 +45,65 @@
     }
 }
 
+@media screen and (max-width: 1024px) and (min-height: 1366px){
+    .App-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
 @media screen and (max-width: 962px) {
     label {
         font-size: var(--size-28);
+    }
+}
+
+@media screen and (max-width: 914px) and (min-height: 1463px) {
+    .App-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 912px) and (min-height: 1368px) {
+    .App-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 900px) and (min-height: 1600px) {
+    .App-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 857px) and (min-height: 1428px) {
+    .App-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 853px) and (min-height: 1280px) {
+    .App-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 839px) and (min-height: 1194px) {
+    .App-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }
 
@@ -66,6 +122,16 @@
 
     #payment {
         width: 40%;
+    }
+}
+
+@media screen and (max-width: 615px) {
+    .form-row {
+        column-gap: 0px;
+    }
+
+    #buttons-container {
+        width: 81%;
     }
 }
 
