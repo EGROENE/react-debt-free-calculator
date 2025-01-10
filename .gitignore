@@ -12,7 +12,6 @@ DEVSLOPES-MENTOR-PLEASE-READ.txt
 /coverage
 
 # production
-/build
 
 # misc
 .DS_Store
